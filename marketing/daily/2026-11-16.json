@@ -1,0 +1,132 @@
+{
+ "date": "2026-11-16",
+ "clips": {
+  "cm-chand-06": {
+   "source": "Wikimedia Commons",
+   "url": "https://upload.wikimedia.org/wikipedia/commons/b/b7/PXL_20241013_153455619_Jagaddhatri_Puja_at_Chandannagar_West_Bengal_06.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+   "license": "CC BY-SA 4.0",
+   "artist": "Sourabh.biswas003",
+   "label": "PXL 20241013 153455619 Jagaddhatri Puja at Chandannagar West Bengal 06.jpg",
+   "page": "https://commons.wikimedia.org/wiki/File:PXL_20241013_153455619_Jagaddhatri_Puja_at_Chandannagar_West_Bengal_06.jpg"
+  },
+  "cm-chand-03": {
+   "source": "Wikimedia Commons",
+   "url": "https://upload.wikimedia.org/wikipedia/commons/a/a8/PXL_20241013_153455619_Jagaddhatri_Puja_at_Chandannagar_West_Bengal_03.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+   "license": "CC BY-SA 4.0",
+   "artist": "Sourabh.biswas003",
+   "label": "PXL 20241013 153455619 Jagaddhatri Puja at Chandannagar West Bengal 03.jpg",
+   "page": "https://commons.wikimedia.org/wiki/File:PXL_20241013_153455619_Jagaddhatri_Puja_at_Chandannagar_West_Bengal_03.jpg"
+  },
+  "cm-chand-13": {
+   "source": "Wikimedia Commons",
+   "url": "https://upload.wikimedia.org/wikipedia/commons/b/bd/PXL_20241013_153455619_Jagaddhatri_Puja_at_Chandannagar_West_Bengal_13.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+   "license": "CC BY-SA 4.0",
+   "artist": "Sourabh.biswas003",
+   "label": "PXL 20241013 153455619 Jagaddhatri Puja at Chandannagar West Bengal 13.jpg",
+   "page": "https://commons.wikimedia.org/wiki/File:PXL_20241013_153455619_Jagaddhatri_Puja_at_Chandannagar_West_Bengal_13.jpg"
+  },
+  "cm-chand-08": {
+   "source": "Wikimedia Commons",
+   "url": "https://upload.wikimedia.org/wikipedia/commons/f/f0/PXL_20241013_153455619_Jagaddhatri_Puja_at_Chandannagar_West_Bengal_08.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+   "license": "CC BY-SA 4.0",
+   "artist": "Sourabh.biswas003",
+   "label": "PXL 20241013 153455619 Jagaddhatri Puja at Chandannagar West Bengal 08.jpg",
+   "page": "https://commons.wikimedia.org/wiki/File:PXL_20241013_153455619_Jagaddhatri_Puja_at_Chandannagar_West_Bengal_08.jpg"
+  },
+  "cm-chand-01": {
+   "source": "Wikimedia Commons",
+   "url": "https://upload.wikimedia.org/wikipedia/commons/e/ea/PXL_20241013_153455619_Jagaddhatri_Puja_at_Chandannagar_West_Bengal_01.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+   "license": "CC BY-SA 4.0",
+   "artist": "Sourabh.biswas003",
+   "label": "PXL 20241013 153455619 Jagaddhatri Puja at Chandannagar West Bengal 01.jpg",
+   "page": "https://commons.wikimedia.org/wiki/File:PXL_20241013_153455619_Jagaddhatri_Puja_at_Chandannagar_West_Bengal_01.jpg"
+  },
+  "cm-chand-10": {
+   "source": "Wikimedia Commons",
+   "url": "https://upload.wikimedia.org/wikipedia/commons/7/7f/PXL_20241013_153455619_Jagaddhatri_Puja_at_Chandannagar_West_Bengal_10.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+   "license": "CC BY-SA 4.0",
+   "artist": "Sourabh.biswas003",
+   "label": "PXL 20241013 153455619 Jagaddhatri Puja at Chandannagar West Bengal 10.jpg",
+   "page": "https://commons.wikimedia.org/wiki/File:PXL_20241013_153455619_Jagaddhatri_Puja_at_Chandannagar_West_Bengal_10.jpg"
+  }
+ },
+ "items": [
+  {
+   "id": "r1",
+   "type": "reel",
+   "at": "21:30",
+   "style": "punch",
+   "hook": "The lights at your Durga Puja pandal? Many are made in this town.",
+   "hook_text": "The lights at your Durga Puja pandal? Many are made in [this town].",
+   "segments": [
+    [
+     "cm-chand-06",
+     0,
+     2.4,
+     "",
+     0.5,
+     0.45
+    ],
+    [
+     "cm-chand-03",
+     0,
+     1.8,
+     "Chandannagar's [light artists]",
+     0.5,
+     0.4
+    ],
+    [
+     "cm-chand-13",
+     0,
+     1.8,
+     "Myths, folk tales, even [the news]",
+     0.5,
+     0.45
+    ],
+    [
+     "cm-chand-08",
+     0,
+     1.8,
+     "Kolkata's pandals hire them [too]",
+     0.5,
+     0.45
+    ],
+    [
+     "cm-chand-01",
+     0,
+     1.8,
+     "Jagaddhatri Navami: [Thu 19 Nov]",
+     0.5,
+     0.45
+    ]
+   ],
+   "end": [
+    "Have you seen Chandannagar's lights?",
+    "Tell us in the comments"
+   ],
+   "end_clip": [
+    "cm-chand-10",
+    0,
+    0.5,
+    0.45
+   ],
+   "music": [
+    "f23",
+    60
+   ],
+   "search": [
+    "jagaddhatri puja"
+   ],
+   "caption": {
+    "en": "Jagaddhatri Puja 2026 in Chandannagar, near Kolkata: the town whose light artists light up Durga Puja too ✨\n\nChandannagar's light artists build huge illuminated panels and figures, once from small bulbs and now mostly LEDs: scenes from mythology, folk tales, current events and pure fantasy. They are in demand far beyond the town, including for Durga Puja pandals in Kolkata.\n\nJagaddhatri Navami is on Thursday 19 November by Drik Panchang's Kolkata calendar (some calendars say 18 November), and the town celebrates over several days around it. Photos from 2024.\n\nHave you seen Chandannagar's lights? Tell us in the comments 👇",
+    "keywords": [
+     "jagaddhatri puja 2026",
+     "chandannagar lighting",
+     "chandannagar jagaddhatri puja",
+     "jagaddhatri puja date"
+    ],
+    "tags": "#jagaddhatripuja #chandannagar #kolkata"
+   }
+  }
+ ]
+}
