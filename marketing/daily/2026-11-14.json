@@ -19,15 +19,6 @@
    "page": "https://commons.wikimedia.org/wiki/File:Video_clip_of_Durga_puja_2023_in_Kolkata_02.webm",
    "dur": 14.5
   },
-  "cm-9b953c": {
-   "source": "Wikimedia Commons",
-   "url": "https://upload.wikimedia.org/wikipedia/commons/c/c9/Dhunuchi_dance_at_Samajsevi_Sangh_V_20181017_112000.webm?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
-   "license": "CC BY-SA 3.0",
-   "artist": "Sumita Roy Dutta",
-   "label": "Dhunuchi dance at Samajsevi Sangh V 20181017 112000",
-   "page": "https://commons.wikimedia.org/wiki/File:Dhunuchi_dance_at_Samajsevi_Sangh_V_20181017_112000.webm",
-   "dur": 29.3
-  },
   "cm-d6887c": {
    "source": "Wikimedia Commons",
    "url": "https://upload.wikimedia.org/wikipedia/commons/b/b0/Durga_Puja_Pandal_Visiting_-_Ekdalia_Evergreen_-_Ekdalia_Road_-_Kolkata_2013-10-11_3311.ogv?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
@@ -54,6 +45,15 @@
    "label": "A video of Devi Boron ritual during Durga puja 2025 in Kolkata",
    "page": "https://commons.wikimedia.org/wiki/File:A_video_of_Devi_Boron_ritual_during_Durga_puja_2025_in_Kolkata.webm",
    "dur": 23.8
+  },
+  "cm-7aa2a5": {
+   "source": "Wikimedia Commons",
+   "url": "https://upload.wikimedia.org/wikipedia/commons/2/2d/Video_clip_of_Durga_puja_2023_in_Kolkata_03.webm?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+   "license": "CC BY-SA 4.0",
+   "artist": "Sumita Roy Dutta",
+   "label": "Video clip of Durga puja 2023 in Kolkata 03",
+   "page": "https://commons.wikimedia.org/wiki/File:Video_clip_of_Durga_puja_2023_in_Kolkata_03.webm",
+   "dur": 8.6
   }
  },
  "items": [
@@ -78,8 +78,8 @@
      "More pandal [routes]?"
     ],
     [
-     "cm-9b953c",
-     6,
+     "cm-7aa2a5",
+     2,
      1.8,
      "More [food] stops?"
     ],
