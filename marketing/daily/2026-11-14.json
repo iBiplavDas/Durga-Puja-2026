@@ -1,0 +1,126 @@
+{
+ "date": "2026-11-14",
+ "clips": {
+  "cm-7ac057": {
+   "source": "Wikimedia Commons",
+   "url": "https://upload.wikimedia.org/wikipedia/commons/e/e3/Video_clip_of_Durga_puja_2023_in_Kolkata_01.webm?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+   "license": "CC BY-SA 4.0",
+   "artist": "Sumita Roy Dutta",
+   "label": "Video clip of Durga puja 2023 in Kolkata 01",
+   "page": "https://commons.wikimedia.org/wiki/File:Video_clip_of_Durga_puja_2023_in_Kolkata_01.webm",
+   "dur": 11.2
+  },
+  "cm-d40251": {
+   "source": "Wikimedia Commons",
+   "url": "https://upload.wikimedia.org/wikipedia/commons/0/06/Video_clip_of_Durga_puja_2023_in_Kolkata_02.webm?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+   "license": "CC BY-SA 4.0",
+   "artist": "Sumita Roy Dutta",
+   "label": "Video clip of Durga puja 2023 in Kolkata 02",
+   "page": "https://commons.wikimedia.org/wiki/File:Video_clip_of_Durga_puja_2023_in_Kolkata_02.webm",
+   "dur": 14.5
+  },
+  "cm-9b953c": {
+   "source": "Wikimedia Commons",
+   "url": "https://upload.wikimedia.org/wikipedia/commons/c/c9/Dhunuchi_dance_at_Samajsevi_Sangh_V_20181017_112000.webm?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+   "license": "CC BY-SA 3.0",
+   "artist": "Sumita Roy Dutta",
+   "label": "Dhunuchi dance at Samajsevi Sangh V 20181017 112000",
+   "page": "https://commons.wikimedia.org/wiki/File:Dhunuchi_dance_at_Samajsevi_Sangh_V_20181017_112000.webm",
+   "dur": 29.3
+  },
+  "cm-d6887c": {
+   "source": "Wikimedia Commons",
+   "url": "https://upload.wikimedia.org/wikipedia/commons/b/b0/Durga_Puja_Pandal_Visiting_-_Ekdalia_Evergreen_-_Ekdalia_Road_-_Kolkata_2013-10-11_3311.ogv?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+   "license": "CC BY 3.0",
+   "artist": "Biswarup Ganguly",
+   "label": "Durga Puja Pandal Visiting - Ekdalia Evergreen - Ekdalia Road - Kolkata 2013-10-",
+   "page": "https://commons.wikimedia.org/wiki/File:Durga_Puja_Pandal_Visiting_-_Ekdalia_Evergreen_-_Ekdalia_Road_-_Kolkata_2013-10-11_3311.ogv",
+   "dur": 23.6
+  },
+  "cm-4b937f": {
+   "source": "Wikimedia Commons",
+   "url": "https://upload.wikimedia.org/wikipedia/commons/e/ed/Video_of_Drone_doing_coverage_during_Mahastami_Aarti_of_Durga_Puja_2021_at_Mudiali_club_Kolkata_VID_20211013_121553.webm?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+   "license": "CC BY-SA 4.0",
+   "artist": "Sumita Roy Dutta",
+   "label": "Video of Drone doing coverage during Mahastami Aarti of Durga Puja 2021 at Mudia",
+   "page": "https://commons.wikimedia.org/wiki/File:Video_of_Drone_doing_coverage_during_Mahastami_Aarti_of_Durga_Puja_2021_at_Mudiali_club_Kolkata_VID_20211013_121553.webm",
+   "dur": 38.9
+  },
+  "cm-137174": {
+   "source": "Wikimedia Commons",
+   "url": "https://upload.wikimedia.org/wikipedia/commons/1/17/A_video_of_Devi_Boron_ritual_during_Durga_puja_2025_in_Kolkata.webm?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+   "license": "CC BY-SA 4.0",
+   "artist": "Sumita Roy Dutta",
+   "label": "A video of Devi Boron ritual during Durga puja 2025 in Kolkata",
+   "page": "https://commons.wikimedia.org/wiki/File:A_video_of_Devi_Boron_ritual_during_Durga_puja_2025_in_Kolkata.webm",
+   "dur": 23.8
+  }
+ },
+ "items": [
+  {
+   "id": "r1",
+   "type": "reel",
+   "at": "21:30",
+   "style": "punch",
+   "hook": "Pujo 2027 is 326 days away. What should we build?",
+   "hook_text": "Pujo 2027 is [326 days] away. What should we build?",
+   "segments": [
+    [
+     "cm-7ac057",
+     1,
+     2.4,
+     ""
+    ],
+    [
+     "cm-d40251",
+     2,
+     1.8,
+     "More pandal [routes]?"
+    ],
+    [
+     "cm-9b953c",
+     6,
+     1.8,
+     "More [food] stops?"
+    ],
+    [
+     "cm-d6887c",
+     4,
+     1.8,
+     "Live [crowd] tips?"
+    ],
+    [
+     "cm-4b937f",
+     10,
+     1.8,
+     "Your own para on the [map]?"
+    ]
+   ],
+   "end": [
+    "What should we build for Pujo 2027?",
+    "Tell us in the comments"
+   ],
+   "end_clip": [
+    "cm-137174",
+    6
+   ],
+   "music": [
+    "f23",
+    30
+   ],
+   "search": [
+    "durga puja"
+   ],
+   "caption": {
+    "en": "Durga Puja 2027 is 326 days away, and we're already planning 🗺️\n\nSaptami falls on Wednesday 6 October 2027, twelve days earlier than this year. This year the guide had pandal routes, food stops and every theme in one place. For next year we want to build what you actually need.\n\nMore routes? More food? Crowd tips? Your own para on the map? Or something we haven't thought of?\n\nWhat should we build for Pujo 2027 in Kolkata? Tell us in the comments 👇",
+    "keywords": [
+     "durga puja 2027",
+     "kolkata pandal guide",
+     "pandal hopping app kolkata",
+     "pujo parikrama"
+    ],
+    "tags": "#durgapuja2027 #kolkatadurgapuja #pujoparikrama"
+   }
+  }
+ ]
+}
