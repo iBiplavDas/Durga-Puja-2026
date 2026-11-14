@@ -1,0 +1,132 @@
+{
+ "date": "2026-11-18",
+ "clips": {
+  "cm-chand-07": {
+   "source": "Wikimedia Commons",
+   "url": "https://upload.wikimedia.org/wikipedia/commons/d/d8/PXL_20241013_153455619_Jagaddhatri_Puja_at_Chandannagar_West_Bengal_07.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+   "license": "CC BY-SA 4.0",
+   "artist": "Sourabh.biswas003",
+   "label": "PXL 20241013 153455619 Jagaddhatri Puja at Chandannagar West Bengal 07.jpg",
+   "page": "https://commons.wikimedia.org/wiki/File:PXL_20241013_153455619_Jagaddhatri_Puja_at_Chandannagar_West_Bengal_07.jpg"
+  },
+  "cm-chand-r18": {
+   "source": "Wikimedia Commons",
+   "url": "https://upload.wikimedia.org/wikipedia/commons/b/bc/PXL_20241013_153455619_Jagaddhatri_Puja_at_Chandannagar_West_Bengal_18.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+   "license": "CC BY-SA 4.0",
+   "artist": "Sourabh.biswas003",
+   "label": "PXL 20241013 153455619 Jagaddhatri Puja at Chandannagar West Bengal 18.jpg",
+   "page": "https://commons.wikimedia.org/wiki/File:PXL_20241013_153455619_Jagaddhatri_Puja_at_Chandannagar_West_Bengal_18.jpg"
+  },
+  "cm-chand-25": {
+   "source": "Wikimedia Commons",
+   "url": "https://upload.wikimedia.org/wikipedia/commons/9/91/PXL_20241013_153455619_Jagaddhatri_Puja_at_Chandannagar_West_Bengal_25.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+   "license": "CC BY-SA 4.0",
+   "artist": "Sourabh.biswas003",
+   "label": "PXL 20241013 153455619 Jagaddhatri Puja at Chandannagar West Bengal 25.jpg",
+   "page": "https://commons.wikimedia.org/wiki/File:PXL_20241013_153455619_Jagaddhatri_Puja_at_Chandannagar_West_Bengal_25.jpg"
+  },
+  "cm-chand-05": {
+   "source": "Wikimedia Commons",
+   "url": "https://upload.wikimedia.org/wikipedia/commons/b/bc/PXL_20241013_153455619_Jagaddhatri_Puja_at_Chandannagar_West_Bengal_05.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+   "license": "CC BY-SA 4.0",
+   "artist": "Sourabh.biswas003",
+   "label": "PXL 20241013 153455619 Jagaddhatri Puja at Chandannagar West Bengal 05.jpg",
+   "page": "https://commons.wikimedia.org/wiki/File:PXL_20241013_153455619_Jagaddhatri_Puja_at_Chandannagar_West_Bengal_05.jpg"
+  },
+  "cm-chand-idol22": {
+   "source": "Wikimedia Commons",
+   "url": "https://upload.wikimedia.org/wikipedia/commons/0/08/PXL_20241013_153455619_Jagaddhatri_Puja_at_Chandannagar_West_Bengal_22.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+   "license": "CC BY-SA 4.0",
+   "artist": "Sourabh.biswas003",
+   "label": "PXL 20241013 153455619 Jagaddhatri Puja at Chandannagar West Bengal 22.jpg",
+   "page": "https://commons.wikimedia.org/wiki/File:PXL_20241013_153455619_Jagaddhatri_Puja_at_Chandannagar_West_Bengal_22.jpg"
+  },
+  "cm-chand-17": {
+   "source": "Wikimedia Commons",
+   "url": "https://upload.wikimedia.org/wikipedia/commons/7/7a/PXL_20241013_153455619_Jagaddhatri_Puja_at_Chandannagar_West_Bengal_17.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+   "license": "CC BY-SA 4.0",
+   "artist": "Sourabh.biswas003",
+   "label": "PXL 20241013 153455619 Jagaddhatri Puja at Chandannagar West Bengal 17.jpg",
+   "page": "https://commons.wikimedia.org/wiki/File:PXL_20241013_153455619_Jagaddhatri_Puja_at_Chandannagar_West_Bengal_17.jpg"
+  }
+ },
+ "items": [
+  {
+   "id": "r1",
+   "type": "reel",
+   "at": "21:30",
+   "style": "punch",
+   "hook": "Chandannagar this week: 3 things to know before you go",
+   "hook_text": "Chandannagar this week: [3 things] to know before you go",
+   "segments": [
+    [
+     "cm-chand-07",
+     0,
+     2.4,
+     "",
+     0.5,
+     0.45
+    ],
+    [
+     "cm-chand-r18",
+     0,
+     1.9,
+     "1. Train on the [Howrah–Bandel] line",
+     0.5,
+     0.45
+    ],
+    [
+     "cm-chand-25",
+     0,
+     1.8,
+     "2. Go [early] in the evening",
+     0.5,
+     0.45
+    ],
+    [
+     "cm-chand-05",
+     0,
+     1.9,
+     "3. Plan your [return] before you go",
+     0.5,
+     0.45
+    ],
+    [
+     "cm-chand-idol22",
+     0,
+     1.8,
+     "Navami: [Thu 19 Nov]",
+     0.5,
+     0.4
+    ]
+   ],
+   "end": [
+    "Who's going to Chandannagar this year?",
+    "Tag who you're going with"
+   ],
+   "end_clip": [
+    "cm-chand-17",
+    0,
+    0.5,
+    0.4
+   ],
+   "music": [
+    "f19",
+    8
+   ],
+   "search": [
+    "jagaddhatri puja"
+   ],
+   "caption": {
+    "en": "Going to Chandannagar for Jagaddhatri Puja 2026 from Kolkata? Three things first 🚆\n\n1. Chandannagar is on the Howrah to Bandel suburban railway line.\n2. Trains and roads get very crowded, so travel early in the evening.\n3. Plan your return before you set out, especially if you'll be out late, and check local transport and police advisories.\n\nJagaddhatri Navami is on Thursday 19 November by Drik Panchang's Kolkata calendar (some calendars say 18 November). Photos from 2024. The full guide is on pujoparikramaguide.in.\n\nWho are you going with? Tag them in the comments 👇",
+    "keywords": [
+     "chandannagar jagaddhatri puja 2026",
+     "how to reach chandannagar",
+     "jagaddhatri puja 2026 date",
+     "chandannagar lighting"
+    ],
+    "tags": "#jagaddhatripuja #chandannagar #kolkata"
+   }
+  }
+ ]
+}
