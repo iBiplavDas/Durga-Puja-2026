@@ -623,9 +623,10 @@ class PunchStyleTest(unittest.TestCase):
                          [[("BENGAL:", False)], [("KALI PUJA", True)], [("TONIGHT", False)]])
         self.assertEqual(punch.tokens("one of these two on [Diwali]. Which?")[-2:],
                          [[("DIWALI", True), (".", False)], [("WHICH?", False)]])
-        for f in sorted(Path("marketing/daily").glob("2026-11-0[3-7].json")):
-            it = json.load(open(f, encoding="utf-8"))["items"][0]
-            self.assertEqual(it["style"], "punch")
+        plans = sorted(Path("marketing/daily").glob("2*.json")) + sorted(Path("marketing/daily/later").glob("*.json"))
+        punch_items = [it for f in plans for it in json.load(open(f, encoding="utf-8"))["items"] if it.get("style") == "punch"]
+        self.assertTrue(punch_items)
+        for it in punch_items:
             self.assertNotIn("[", it["hook"])  # the manifest hook is plain; hook_text carries the highlight
             self.assertEqual(it["hook_text"].replace("[", "").replace("]", ""), it["hook"])
             self.assertTrue(all(1.4 <= s[2] <= 2.6 for s in it["segments"]))  # fast cuts
