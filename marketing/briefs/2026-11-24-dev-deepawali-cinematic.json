@@ -16,7 +16,8 @@
    "subject": "A respectful cinematic portrayal of the Tripurari legend (Shiva shown only as a vast backlit silhouette drawing a bow) and of Dev Deepawali at the ghats of Varanasi on the Ganga. Generated crowds and priests; no real identifiable person.",
    "verified_claims": [
     "Dev Deepawali is celebrated in Varanasi on Kartik Purnima, which falls on Tuesday 24 November 2026.",
-    "Tradition holds that the gods celebrated Shiva's victory over Tripurasura by lighting lamps, and that they descend to the Ganga at Kashi on this night."
+    "Tradition holds that the gods celebrated Shiva's victory over Tripurasura by lighting lamps, and that they descend to the Ganga at Kashi on this night.",
+    "Dev Deepawali falls on Kartik Purnima, traditionally said to be 15 days after Diwali (Kartik Amavasya); in 2026 Diwali is on 8 Nov."
    ],
    "call_to_action": "None inside the film. The caption asks viewers to send it to someone who has seen Dev Deepawali in Banaras."
   },
@@ -37,13 +38,13 @@
     "id": "hook",
     "start_ms": 0,
     "end_ms": 3500,
-    "intention": "Hook: one tiny flame in total darkness poses the mystery.",
+    "intention": "Hook: a question the viewer can't scroll past (why do the gods celebrate Diwali 15 days after us?) over one tiny flame in total darkness.",
     "framing": "Extreme close-up at water level: a woman's hands, seen only from the wrists, cup a small clay diya with a single flame over black still water; deep darkness around.",
     "action": "The hands gently set the lit diya onto the dark river and release it; it drifts forward towards the lens as its reflection trembles.",
     "camera_movement": "Very slow push in at water level.",
     "lighting": "Only the warm flame light on the hands and water, deep black-indigo around, a faint haze.",
     "reference_ids": [],
-    "dialogue": "एक रात… जब देवता खुद दीये जलाने आते हैं।",
+    "dialogue": "देवताओं की दिवाली… हमारी दिवाली के 15 दिन बाद क्यों आती है?",
     "transition": "cut"
    },
    {
@@ -69,7 +70,7 @@
     "camera_movement": "Slow push in behind the silhouette, then a whip tilt up following the arrow.",
     "lighting": "Pure backlit silhouette against a pale storm sky, the arrow a blazing golden streak lighting the clouds.",
     "reference_ids": [],
-    "dialogue": "जब तीनों नगर एक सीध में आए, शिव ने एक ही बाण चलाया।",
+    "dialogue": "कार्तिक पूर्णिमा पर, जब तीनों नगर एक सीध में आए, शिव ने एक ही बाण चलाया।",
     "transition": "cut"
    },
    {
@@ -108,7 +109,7 @@
     "camera_movement": "Slow low-angle arc around the lamps.",
     "lighting": "Strong warm firelight from the lamps on faces and brass, dark indigo river and sky behind.",
     "reference_ids": [],
-    "dialogue": "आज भी, कार्तिक पूर्णिमा की रात…",
+    "dialogue": "तब से, हर कार्तिक पूर्णिमा की रात…",
     "transition": "cut"
    },
    {
