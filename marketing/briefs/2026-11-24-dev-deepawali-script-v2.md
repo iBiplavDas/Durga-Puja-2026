@@ -1,5 +1,7 @@
 # Dev Deepawali, script v2: narration and edit order
 
+**Status: script approved by the owner, 15 Nov 2026.** Narration: ElevenLabs (see below). The calendar proposes moving the post to **Sun 22 Nov**, two days before the festival, if the clips arrive by Wed 18 Nov; otherwise it stays on Tue 24 Nov.
+
 *15 Nov 2026. Replaces the narration table in `2026-11-24-dev-deepawali-flow-prompts.md`. **The 12 Flow prompts are unchanged:** generate the clips exactly as that sheet says. Only the voice script and the order of the clips in the edit change.*
 
 **The reel:** about 78 s, 9:16. Posts Tue 24 Nov at 7:27 pm IST, but only after the owner approves the finished edit.
@@ -69,9 +71,13 @@ Shot 7 is used twice on purpose: the draw opens the reel as a flash-forward, and
 
 ---
 
-## The narration script (for recording or Google AI Studio)
+## The narration script (ElevenLabs)
 
-**Style:** *Adult male storyteller, deep warm baritone, slow and gripping, like telling a secret. Natural pauses at the commas and dots. A held breath before "शिव ने… एक ही बाण चलाया". Quiet awe on "हज़ार साल का अंधेरा"; a curious, inviting tone on the last question. Never theatrical.*
+The owner chose ElevenLabs. Run `marketing/engine/vo/elevenlabs.py say` with the script below and a deep male Hindi storyteller voice. Find one with `elevenlabs.py voices --shared --lang hi`, model `eleven_multilingual_v2`. It returns `vo.mp3` plus `words.json` (a start and end time for each word), and those timings drive the word-by-word captions. It needs `ELEVENLABS_API_KEY` set as an environment secret.
+
+The owner can also generate it on elevenlabs.io directly: paste the script, choose the voice, download the MP3 and send it. The captions are then timed by hand.
+
+**Voice direction** (for choosing the voice, or for ElevenLabs v3 audio tags): *Adult male storyteller, deep warm baritone, slow and gripping, like telling a secret. Natural pauses at the commas and dots. A held breath before "शिव ने… एक ही बाण चलाया". Quiet awe on "हज़ार साल का अंधेरा"; a curious, inviting tone on the last question. Never theatrical.*
 
 ```
 तीन असुरों को मारने के लिए… पूरा ब्रह्मांड हथियार बना।
