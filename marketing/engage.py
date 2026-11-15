@@ -333,16 +333,64 @@ def plan_index():
     return idx
 
 
+FOLLOW = {"FOLLOWER": "follower", "NON_FOLLOWER": "non_follower", "UNKNOWN": "unknown"}
+
+
+def _split(resp):
+    """{follower, non_follower, unknown} from an insights response broken down by follow_type."""
+    out = {}
+    for m in (resp or {}).get("data", []):
+        for b in (m.get("total_value") or {}).get("breakdowns", []):
+            for r in b.get("results", []):
+                k = FOLLOW.get((r.get("dimension_values") or [""])[0])
+                if k:
+                    out[k] = out.get(k, 0) + (r.get("value") or 0)
+    return out
+
+
+def follow_split(user, token, now=None):
+    """Who the page reaches: followers or new people. Account reach broken down by follow_type for the last 7 and
+    28 days and for each of the last 14 days (so a reel's day stands out), plus the non-follower share. Read-only;
+    an error (an older token, an unsupported breakdown) is recorded rather than raised."""
+    now = now or dt.datetime.now(dt.timezone.utc)
+    end = int(now.timestamp())
+
+    def window(since, until):
+        r, e = safe(graph, "GET", f"{user}/insights", token, metric="reach", period="day", metric_type="total_value",
+                    breakdown="follow_type", since=str(since), until=str(until))
+        s = _split(r)
+        tot = sum(s.values())
+        if tot:
+            s["non_follower_share"] = round(s.get("non_follower", 0) / tot, 3)
+        return s, e
+
+    res, err = {}, None
+    for name, days in (("last_7d", 7), ("last_28d", 28)):
+        res[name], e = window(end - days * 86400, end)
+        err = err or e
+    res["by_day"] = []
+    today = now.replace(hour=0, minute=0, second=0, microsecond=0)
+    for i in range(14, 0, -1):  # each full day, oldest first (Instagram counts days in the account's time zone)
+        d0 = today - dt.timedelta(days=i)
+        s, e = window(int(d0.timestamp()), int((d0 + dt.timedelta(days=1)).timestamp()))
+        err = err or e
+        res["by_day"].append({"date": d0.date().isoformat(), **s})
+    res["error"] = err
+    return res
+
+
 def stats(out):
     """Read-only: likes and comments for every post (and reach, saves, shares, views when the token carries
-    instagram_manage_insights), each labelled with its plan item and format, so formats can be compared."""
+    instagram_manage_insights), each labelled with its plan item and format, so formats can be compared. With
+    insights it also records who was reached: followers or non-followers, for the account (last 7 and 28 days and
+    day by day) and for each reel where the API allows it."""
     user, token = creds()
     media, err = safe(graph, "GET", f"{user}/media", token, limit="50",
                       fields="id,caption,media_type,media_product_type,timestamp,permalink,like_count,comments_count")
     if err:
         raise SystemExit(f"cannot read posts: {err}")
     idx = plan_index()
-    rows, ins_err = [], None
+    rows, ins_err, reel_split_err = [], None, None
     for m in media.get("data", []):
         key = " ".join((m.get("caption") or "").split())[:60]
         row = {"media": m["id"], "at": m["timestamp"], "type": m.get("media_product_type") or m.get("media_type"),
@@ -356,6 +404,14 @@ def stats(out):
                             for x in ins.get("data", [])})
             else:
                 ins_err = e
+        if row["type"] == "REELS" and reel_split_err is None and ins_err is None:
+            r, e = safe(graph, "GET", f"{m['id']}/insights", token, metric="reach", metric_type="total_value",
+                        breakdown="follow_type")
+            s = _split(r)
+            if s:
+                row.update({f"reach_{k}": v for k, v in s.items()})
+            else:  # the API may not split a single reel; then the account-level split below is what we have
+                reel_split_err = e or "no follow_type breakdown returned"
         rows.append(row)
     by = {}
     for r in rows:
@@ -363,11 +419,21 @@ def stats(out):
         b["posts"] += 1
         b["likes"] += r["likes"] or 0
         b["comments"] += r["comments"] or 0
+    audience = follow_split(user, token) if ins_err is None else {"error": "no insights permission"}
     data = {"taken_at": dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds"), "posts": rows,
-            "by_format": by, "insights_error": ins_err}
+            "by_format": by, "insights_error": ins_err, "audience": audience, "reel_split_error": reel_split_err}
     Path(out).parent.mkdir(parents=True, exist_ok=True)
     Path(out).write_text(json.dumps(data, ensure_ascii=False, indent=1), encoding="utf-8")
     print(f"{len(rows)} posts" + ("" if not ins_err else " (likes and comments only: no insights permission)"))
+    for w in ("last_7d", "last_28d"):
+        a = audience.get(w) or {}
+        if a:
+            print(f"  reach {w}: {a.get('follower', 0)} followers · {a.get('non_follower', 0)} non-followers"
+                  f" ({a.get('non_follower_share', 0):.0%} new people)")
+    if audience.get("error"):
+        print(f"  follower split: {audience['error']}")
+    if reel_split_err:
+        print(f"  per-reel follower split unavailable: {reel_split_err[:120]}")
     for f, b in sorted(by.items(), key=lambda kv: -(kv[1]["likes"] + 3 * kv[1]["comments"]) / kv[1]["posts"]):
         print(f"  {f:24s} {b['posts']:3d} posts · {b['likes'] / b['posts']:.1f} likes · {b['comments'] / b['posts']:.1f} comments per post")
     for r in sorted(rows, key=lambda r: -((r["likes"] or 0) + 3 * (r["comments"] or 0)))[:5]:
