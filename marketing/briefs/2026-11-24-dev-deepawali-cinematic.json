@@ -1,0 +1,152 @@
+{
+ "video_generation_confirmed": true,
+ "video_title": "Dev Deepawali cinematic reel",
+ "user_intent": "Generate a 30-second cinematic, realistic Hindi-narrated reel about Dev Deepawali (the Diwali of the gods in Kashi) for Instagram, to post on 24 Nov 2026",
+ "production_spec": {
+  "schema_version": 1,
+  "blueprint": {
+   "id": "generic",
+   "revision": "5250b0947e31b8792740e4de",
+   "selection_reason": "A narrated festival and mythology film is not a product, try-on or unboxing film; the free film is the only guide written for an ask no template covers. Closest template is the faceless unboxing (voice-over with no presenter on camera); it was not used because there is no product, but its voice-over-only approach is borrowed."
+  },
+  "brief": {
+   "objective": "A 30-second cinematic Hindi reel about Dev Deepawali: on Kartik Purnima, Shiva destroyed the three flying cities of Tripurasura with a single arrow, and the gods celebrated by lighting lamps in Kashi. To this day Varanasi lights its ghats with countless diyas on that night. Key message: the night the gods' own Diwali comes alive on the Ganga.",
+   "audience": "Hindi-speaking teens and adults (16 to 40) across India, scrolling Instagram Reels in the evening, who love epic, spiritual, visually stunning storytelling. Not children.",
+   "placement": "Instagram Reels, 9:16, sound on. The first second must stop the scroll; the film should feel like a scene from an epic film, worth rewatching and sending to someone in Banaras.",
+   "subject": "A respectful cinematic portrayal of the Tripurari legend (Shiva shown only as a vast backlit silhouette drawing a bow) and of Dev Deepawali at the ghats of Varanasi on the Ganga. Generated crowds and priests; no real identifiable person.",
+   "verified_claims": [
+    "Dev Deepawali is celebrated in Varanasi on Kartik Purnima, which falls on Tuesday 24 November 2026.",
+    "Tradition holds that the gods celebrated Shiva's victory over Tripurasura by lighting lamps, and that they descend to the Ganga at Kashi on this night.",
+    "Dev Deepawali falls on Kartik Purnima, traditionally said to be 15 days after Diwali (Kartik Amavasya); in 2026 Diwali is on 8 Nov."
+   ],
+   "call_to_action": "None inside the film. The caption asks viewers to send it to someone who has seen Dev Deepawali in Banaras."
+  },
+  "output": {
+   "engine": "seedance",
+   "aspect_ratio": "9:16",
+   "duration_seconds": 30,
+   "resolution": "720p"
+  },
+  "visual_direction": {
+   "concept": "From cosmic darkness to a river of light. One tiny diya flame opens the film; the legend plays out in a vast stormy cosmic sky (three burning flying fortresses, a single arrow of fire from a giant silhouette, the cities shattering into a rain of golden sparks); the sparks fall and become the diyas of Varanasi, and the film ends on an aerial of the whole crescent of ghats glowing under the full moon. The emotional arc is fear turning into wonder; the payoff is the river of light.",
+   "setting": "The ghats of Varanasi on the Ganga at night on a full-moon Kartik Purnima: endless worn stone steps rising from the river, old temples and palaces above, wooden boats on dark water, countless small clay diyas on every step, marigold garlands, incense smoke. The legend beats are set in a vast stormy cosmic night sky above Himalayan peaks.",
+   "look": "Photorealistic live-action epic film look: anamorphic lens character, shallow depth of field, rich film grain, deep indigo-teal night against molten gold firelight, volumetric smoke and haze, flickering real flame light on wet stone and water, long mirror reflections on the river. Grounded and majestic, never cartoonish, never glossy plastic.",
+   "continuity": "The river is always the Ganga, flowing across the frame with the ghats rising on screen left; the full moon sits high on screen right in every Varanasi shot; the diyas are always small clay lamps with real flames; the golden spark colour of the arrow carries into the diya light."
+  },
+  "storyboard": [
+   {
+    "id": "hook",
+    "start_ms": 0,
+    "end_ms": 3500,
+    "intention": "Hook: a question the viewer can't scroll past (why do the gods celebrate Diwali 15 days after us?) over one tiny flame in total darkness.",
+    "framing": "Extreme close-up at water level: a woman's hands, seen only from the wrists, cup a small clay diya with a single flame over black still water; deep darkness around.",
+    "action": "The hands gently set the lit diya onto the dark river and release it; it drifts forward towards the lens as its reflection trembles.",
+    "camera_movement": "Very slow push in at water level.",
+    "lighting": "Only the warm flame light on the hands and water, deep black-indigo around, a faint haze.",
+    "reference_ids": [],
+    "dialogue": "देवताओं की दिवाली… हमारी दिवाली के 15 दिन बाद क्यों आती है?",
+    "transition": "cut"
+   },
+   {
+    "id": "tripura",
+    "start_ms": 3500,
+    "end_ms": 8500,
+    "intention": "The threat: the three flying cities of Tripurasura terrorise the worlds.",
+    "framing": "Wide low-angle shot of a vast stormy night sky above dark Himalayan peaks: three colossal ancient fortress-cities float in the sky, one of gold, one of silver, one of iron, glowing red at their cores.",
+    "action": "The three flying cities drift slowly across the sky, lightning flickering around them, embers falling from them onto the dark peaks.",
+    "camera_movement": "Slow tilt up from the peaks to the cities.",
+    "lighting": "Storm-blue night lit by red fire from the cities and white lightning flashes.",
+    "reference_ids": [],
+    "dialogue": "त्रिपुरासुर के तीन उड़ते नगरों से, तीनों लोक काँप रहे थे।",
+    "transition": "cut"
+   },
+   {
+    "id": "arrow",
+    "start_ms": 8500,
+    "end_ms": 13500,
+    "intention": "The turning point: one arrow, one moment.",
+    "framing": "Wide shot from behind and below a colossal silhouette of Shiva standing on a mountain summit, matted hair flowing, a crescent moon glinting in his hair, drawing a gigantic bow aimed at the sky where the three cities line up in a single row.",
+    "action": "The silhouette draws the bow to full stretch, the arrowhead ignites with blinding golden fire, and he releases it; the arrow streaks up towards the three aligned cities.",
+    "camera_movement": "Slow push in behind the silhouette, then a whip tilt up following the arrow.",
+    "lighting": "Pure backlit silhouette against a pale storm sky, the arrow a blazing golden streak lighting the clouds.",
+    "reference_ids": [],
+    "dialogue": "कार्तिक पूर्णिमा पर, जब तीनों नगर एक सीध में आए, शिव ने एक ही बाण चलाया।",
+    "transition": "cut"
+   },
+   {
+    "id": "sparks",
+    "start_ms": 13500,
+    "end_ms": 17000,
+    "intention": "Release: darkness breaks into light.",
+    "framing": "Wide shot of the sky: the three cities in a single line as the arrow pierces through all of them.",
+    "action": "The cities burst silently into a vast shower of golden sparks that drift slowly down through the clouds like falling lamps, the storm clouds parting to reveal a full moon.",
+    "camera_movement": "Slow tilt down following the falling sparks.",
+    "lighting": "Golden spark light filling the frame, the storm turning to a calm moonlit indigo sky.",
+    "reference_ids": [],
+    "dialogue": "और अंधकार खत्म हुआ।",
+    "transition": "dissolve"
+   },
+   {
+    "id": "ghats",
+    "start_ms": 17000,
+    "end_ms": 22500,
+    "intention": "Match: the falling sparks become the diyas of Kashi.",
+    "framing": "Wide shot from a wooden boat on the Ganga looking at the ghats of Varanasi: endless stone steps covered in rows of countless small diyas, temples above, the full moon high on the right.",
+    "action": "Golden sparks settle onto the steps as the last diyas flicker to life row by row; boats drift past and the long reflections of the lamps shimmer on the river.",
+    "camera_movement": "Slow lateral glide along the ghats from the boat.",
+    "lighting": "Warm flickering diya light on stone and water against deep indigo night, soft haze and incense smoke.",
+    "reference_ids": [],
+    "dialogue": "उस जीत की खुशी में, देवताओं ने काशी में दीप जलाए।",
+    "transition": "cut"
+   },
+   {
+    "id": "aarti",
+    "start_ms": 22500,
+    "end_ms": 26500,
+    "intention": "The living ritual today.",
+    "framing": "Medium shot at the river's edge: a row of young priests in saffron and white raise tall multi-tiered brass lamps blazing with fire; faces in soft profile, smoke rising.",
+    "action": "The priests swing the blazing lamps in slow synchronised circles, flames trailing, smoke curling up into the night; marigold petals fall.",
+    "camera_movement": "Slow low-angle arc around the lamps.",
+    "lighting": "Strong warm firelight from the lamps on faces and brass, dark indigo river and sky behind.",
+    "reference_ids": [],
+    "dialogue": "तब से, हर कार्तिक पूर्णिमा की रात…",
+    "transition": "cut"
+   },
+   {
+    "id": "river_of_light",
+    "start_ms": 26500,
+    "end_ms": 30000,
+    "intention": "The image the film exists for: a river of light.",
+    "framing": "High aerial wide shot over the Ganga: the whole crescent of Varanasi's ghats glowing gold with countless diyas, hundreds of floating lamps on the river, the full moon above.",
+    "action": "Floating diyas drift on the river as the glowing crescent of ghats stretches into the distance; the frame holds in stillness.",
+    "camera_movement": "Slow aerial pull back and rise.",
+    "lighting": "Gold diya light along the curve of the river under a bright full moon, deep indigo sky.",
+    "reference_ids": [],
+    "dialogue": "काशी, देवताओं की दिवाली मनाती है।",
+    "transition": "fade"
+   }
+  ],
+  "reference_images": [],
+  "audio": {
+   "mode": "voice-over",
+   "language": "Hindi",
+   "accent": "Neutral North Indian Hindi",
+   "voice_direction": "Adult male narrator, 35 to 45, deep warm baritone with quiet gravitas; slow, measured storytelling pace with natural pauses at the ellipses and commas; intimate and sincere, awe in the last line, never theatrical or shouty.",
+   "music": "Original instrumental score, 70 BPM: a low drone and soft temple bell in the hook; deep taiko-like drums and dark strings under the Tripura beat; a held breath of silence before the arrow, then a huge swell as it flies; warm shehnai-like melody and strings bloom over the ghats and the aarti and resolve on the final aerial. Always kept under the voice.",
+   "ambience": "Still water lapping in the hook; distant thunder and wind around the flying cities; the creak of a giant bow and a roaring whoosh of the arrow; a soft shimmering rain of sparks; river water, oars and distant temple bells at the ghats; conch, bells and crackling flame during the aarti."
+  },
+  "constraints": [
+   "Respectful devotional portrayal: Shiva appears only as a dignified backlit silhouette with two arms, never a close-up face; no mockery, no gore, no horror.",
+   "No captions, subtitles, titles, watermarks or any lettering, signboards or logos anywhere in the frame.",
+   "No modern objects in the legend beats; at the ghats no visible phones, cars, plastic, electric signboards or LED screens.",
+   "Every person has exactly two arms, two hands and one face; no extra limbs or melting features.",
+   "Photorealistic live-action look throughout; never cartoon, anime or 3D-animated style.",
+   "Every narration line is spoken once, in Hindi, exactly as written, by the same narrator voice; nothing else is spoken."
+  ],
+  "assumptions": [
+   "The owner asked for a cinematic, realistic film rather than the photo-montage style of the Chhath and Jagaddhatri reels, so every shot is generated live-action.",
+   "The legend follows the Tripurantaka story (Shiva destroys Tripura with one arrow when the three cities align) as told in the Shiva Purana and the Mahabharata (Karna Parva); Dev Deepawali is linked to it as the gods' celebration.",
+   "Titles, the date line and the end card are added later in editing, not in the generated film."
+  ]
+ }
+}
