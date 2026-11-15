@@ -1,5 +1,5 @@
 {
- "taken_at": "2026-11-15T07:39:10+00:00",
+ "taken_at": "2026-11-15T07:49:34+00:00",
  "posts": [
   {
    "media": "18066168371560241",
@@ -10,7 +10,7 @@
    "permalink": "https://www.instagram.com/reel/DfwIW53DCve/",
    "first_line": "जगद्धात्री: she who holds the world. 🦁✨",
    "format": "unplanned",
-   "reach": 98,
+   "reach": 103,
    "saved": 0,
    "shares": 0,
    "views": 114
@@ -24,10 +24,10 @@
    "permalink": "https://www.instagram.com/reel/DfwHLifgLG4/",
    "first_line": "हनुमान जी अपनी ही ताकत भूल गए थे। क्यों? 🔊",
    "format": "unplanned",
-   "reach": 51,
+   "reach": 68,
    "saved": 0,
    "shares": 0,
-   "views": 69
+   "views": 74
   },
   {
    "media": "17957339370311564",
@@ -41,10 +41,10 @@
    "id": "r1",
    "format": "reel (footage)",
    "hook": "Pujo 2027 is 326 days away. What should we build?",
-   "reach": 502,
+   "reach": 508,
    "saved": 0,
    "shares": 3,
-   "views": 623
+   "views": 632
   },
   {
    "media": "18180919609463027",
@@ -55,7 +55,7 @@
    "permalink": "https://www.instagram.com/reel/DfuXSs0k4b0/",
    "first_line": "36 घंटे। पानी की एक बूँद भी नहीं। 🌅",
    "format": "unplanned",
-   "reach": 110,
+   "reach": 111,
    "saved": 0,
    "shares": 0,
    "views": 125
@@ -862,5 +862,102 @@
    "comments": 0
   }
  },
- "insights_error": null
+ "insights_error": null,
+ "audience": {
+  "last_7d": {
+   "non_follower": 841,
+   "follower": 34,
+   "non_follower_share": 0.961
+  },
+  "last_28d": {
+   "non_follower": 40479,
+   "follower": 151,
+   "non_follower_share": 0.996
+  },
+  "by_day": [
+   {
+    "date": "2026-11-01",
+    "non_follower": 443,
+    "follower": 21,
+    "non_follower_share": 0.955
+   },
+   {
+    "date": "2026-11-02",
+    "non_follower": 1266,
+    "follower": 20,
+    "non_follower_share": 0.984
+   },
+   {
+    "date": "2026-11-03",
+    "non_follower": 93,
+    "follower": 6,
+    "non_follower_share": 0.939
+   },
+   {
+    "date": "2026-11-04",
+    "non_follower": 9,
+    "follower": 5,
+    "non_follower_share": 0.643
+   },
+   {
+    "date": "2026-11-05",
+    "non_follower": 12,
+    "follower": 4,
+    "non_follower_share": 0.75
+   },
+   {
+    "date": "2026-11-06",
+    "non_follower": 11,
+    "follower": 5,
+    "non_follower_share": 0.688
+   },
+   {
+    "date": "2026-11-07",
+    "non_follower": 14,
+    "non_follower_share": 1.0
+   },
+   {
+    "date": "2026-11-08",
+    "follower": 4,
+    "non_follower": 31,
+    "non_follower_share": 0.886
+   },
+   {
+    "date": "2026-11-09",
+    "non_follower": 33,
+    "follower": 4,
+    "non_follower_share": 0.892
+   },
+   {
+    "date": "2026-11-10",
+    "non_follower": 9,
+    "follower": 1,
+    "non_follower_share": 0.9
+   },
+   {
+    "date": "2026-11-11",
+    "non_follower": 8,
+    "follower": 2,
+    "non_follower_share": 0.8
+   },
+   {
+    "date": "2026-11-12",
+    "non_follower": 6,
+    "non_follower_share": 1.0
+   },
+   {
+    "date": "2026-11-13",
+    "non_follower": 11,
+    "non_follower_share": 1.0
+   },
+   {
+    "date": "2026-11-14",
+    "follower": 28,
+    "non_follower": 750,
+    "non_follower_share": 0.964
+   }
+  ],
+  "error": null
+ },
+ "reel_split_error": "Graph API 18066168371560241/insights failed: 400 {\"error\":{\"message\":\"Incompatible breakdowns (follow_type) for metric (reach)\",\"type\":\"IGApiException\",\"code\":100,\"fbtrace_id\":\"A0SjeweN5t87cunG1OwEj1I\"}}"
 }
