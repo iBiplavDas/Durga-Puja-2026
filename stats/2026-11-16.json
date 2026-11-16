@@ -1,6 +1,23 @@
 {
- "taken_at": "2026-11-16T04:44:33+00:00",
+ "taken_at": "2026-11-16T17:47:30+00:00",
  "posts": [
+  {
+   "media": "17966394945227737",
+   "at": "21:30",
+   "type": "REELS",
+   "likes": 5,
+   "comments": 0,
+   "permalink": "https://www.instagram.com/reel/DfzvBV0j8u7/",
+   "first_line": "Jagaddhatri Puja 2026 is this Thursday, in Chandannagar near Kolkata: the town that lights",
+   "date": "2026-11-16",
+   "id": "r1",
+   "format": "reel (footage)",
+   "hook": "Jagaddhatri Puja is this Thursday. The lights at your Durga Puja pandal? Many are made in this town.",
+   "reach": 120,
+   "saved": 0,
+   "shares": 1,
+   "views": 144
+  },
   {
    "media": "18066168371560241",
    "at": "2026-11-15T06:24:56+0000",
@@ -24,10 +41,10 @@
    "permalink": "https://www.instagram.com/reel/DfwHLifgLG4/",
    "first_line": "हनुमान जी अपनी ही ताकत भूल गए थे। क्यों? 🔊",
    "format": "unplanned",
-   "reach": 115,
+   "reach": 116,
    "saved": 0,
    "shares": 0,
-   "views": 120
+   "views": 121
   },
   {
    "media": "17957339370311564",
@@ -41,10 +58,10 @@
    "id": "r1",
    "format": "reel (footage)",
    "hook": "Pujo 2027 is 326 days away. What should we build?",
-   "reach": 776,
+   "reach": 778,
    "saved": 2,
    "shares": 3,
-   "views": 967
+   "views": 970
   },
   {
    "media": "18180919609463027",
@@ -154,10 +171,10 @@
    "id": "rv1",
    "format": "reel (footage)",
    "hook": "Where Kolkata says goodbye to Maa",
-   "reach": 1556,
+   "reach": 1557,
    "saved": 5,
    "shares": 10,
-   "views": 1806
+   "views": 1807
   },
   {
    "media": "18635614246009956",
@@ -729,10 +746,10 @@
    "id": "rr1",
    "format": "reel (route map)",
    "hook": "15 pandals · 1 night: Lake Market & Kalighat Master Route",
-   "reach": 16991,
-   "saved": 256,
+   "reach": 16992,
+   "saved": 255,
    "shares": 238,
-   "views": 20355
+   "views": 20356
   },
   {
    "media": "18097282748221085",
@@ -816,35 +833,18 @@
    "reach": 22,
    "saved": 0,
    "shares": 0
-  },
-  {
-   "media": "18151328386527077",
-   "at": "22:00",
-   "type": "REELS",
-   "likes": 2,
-   "comments": 0,
-   "permalink": "https://www.instagram.com/reel/DepHaTxDuyf/",
-   "first_line": "Save Ekdalia Evergreen, Singhi Park and more for your Kolkata Durga Puja night 🪔",
-   "date": "2026-10-18",
-   "id": "r6",
-   "format": "reel (footage)",
-   "hook": "Save this for your pujo night",
-   "reach": 257,
-   "saved": 0,
-   "shares": 0,
-   "views": 303
   }
  ],
  "by_format": {
+  "reel (footage)": {
+   "posts": 29,
+   "likes": 814,
+   "comments": 5
+  },
   "unplanned": {
    "posts": 4,
    "likes": 24,
    "comments": 0
-  },
-  "reel (footage)": {
-   "posts": 29,
-   "likes": 811,
-   "comments": 5
   },
   "reel (route map)": {
    "posts": 10,
