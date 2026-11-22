@@ -36,6 +36,10 @@ const SLIDE_DATA = [
   { src: 'img/hero-5.jpg', pos: '50% 28%', pandal: 'md_ali_park', author: 'Indrajit Das', license: 'CC BY-SA 3.0', page: 'https://commons.wikimedia.org/wiki/File:DurgaPuja2017_-_Durga_Idol_of_Mohammad_Ali_Park_01.jpg' },
 ];
 const slides = () => SLIDE_DATA.filter((x) => idx.pandal[x.pandal]);
+/* On a slow connection (Chrome tells us; Safari doesn't, so it gets the full size) or in low-data mode, the banner
+ * uses the 480px copies (img/hero-N-sm.jpg, from scripts/hero_photo.py): a quarter of the bytes, still sharp on a phone. */
+const slowNet = () => S.prefs.lowData || !!navigator.connection?.saveData || /2g|^3g$/.test(navigator.connection?.effectiveType || '');
+const heroSrc = (x) => (slowNet() ? x.src.replace(/\.jpg$/, '-sm.jpg') : x.src);
 let slide = 0, slideTimer = null;
 
 const span = () => { const o = { day: 'numeric' }, a = new Date(idx.day.shashthi.date + 'T00:00:00'), b = new Date(idx.day.dashami.date + 'T00:00:00');
@@ -50,7 +54,7 @@ function heroHtml() {
   const when = today ? t('h.todayIs', { day: esc(dn(today)) }) : diff > 0 ? t('h.countdown', { n: bnDigits(diff) }) : over ? t('rm.when') : t('h.planning');
   return `<div class="hero slides" role="group" aria-roledescription="carousel" aria-label="${t('h.heroAlt', { place: '' })}">
     ${SLIDES.map((x, k) => `<button type="button" class="slide ${k === slide ? 'on' : ''}" data-slide="${k}" data-place="${x.pandal}" aria-label="${esc(nm(idx.pandal[x.pandal]))}">
-      <img ${k === slide ? `src="${x.src}" fetchpriority="high"` : `data-src="${x.src}"`} alt="${t('h.heroAlt', { place: esc(nm(idx.pandal[x.pandal])) })}" style="object-position:${x.pos}" decoding="async"></button>`).join('')}
+      <img ${k === slide ? `src="${heroSrc(x)}" fetchpriority="high"` : `data-src="${heroSrc(x)}"`} alt="${t('h.heroAlt', { place: esc(nm(idx.pandal[x.pandal])) })}" style="object-position:${x.pos}" decoding="async"></button>`).join('')}
     <div class="hero-shade"></div>
     <div class="hero-copy">
       <div class="sharad-greet">${plain(t(today ? 'lingo.heroToday' : diff > 0 ? 'lingo.hero' : 'lingo.after'))}</div>

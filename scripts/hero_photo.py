@@ -61,6 +61,8 @@ def slideshow(titles):
         im.thumbnail((1100, 1100))
         name = f"hero-{i + 1}.jpg"
         im.save(f"app/img/{name}", quality=74, optimize=True, progressive=True)
+        sm = im.resize((480, round(im.height * 480 / im.width)))   # the banner uses these on slow connections (views/home.js)
+        sm.save(f"app/img/hero-{i + 1}-sm.jpg", quality=74, optimize=True, progressive=True)
         out.append({"src": f"img/{name}", "w": im.width, "h": im.height, **{k: ph[k] for k in ("title", "author", "license", "page", "year", "pandal", "pandal_name")}})
         print(name, im.size, title)
     Path("app/img/heroes.json").write_text(json.dumps(out, ensure_ascii=False, indent=1))

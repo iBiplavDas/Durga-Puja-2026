@@ -1,8 +1,6 @@
-/* UI strings in English, Bengali and Hindi (Hindi lives in i18n_hi.js). Data text (highlights, notes) stays in the language
+/* UI strings in English, Bengali and Hindi (Hindi lives in i18n_hi.js and loads only when chosen: loadLang). Data text (highlights, notes) stays in the language
  * it was written in. Pandal and zone names use the name_bn column.
  * tests/js checks that every key used in the code exists here, in both languages, with matching {placeholders}. */
-
-import { HI } from './i18n_hi.js';
 
 export const STR = {
   en: {
@@ -947,7 +945,14 @@ export const STR = {
     'kn.wishes': 'বিজয়ার শুভেচ্ছা',
   },
 };
-STR.hi = HI;
+
+/** Load a language's strings before switching to it. English and Bengali are built in; Hindi (about 70 KB) is fetched
+ * the first time someone picks it, so English and Bengali readers don't download it. Offline it comes from sw.js. */
+export async function loadLang(lang) {
+  if (lang === 'hi' && !STR.hi) {
+    try { STR.hi = (await import('./i18n_hi.js')).HI; } catch { /* offline and not cached: t() falls back to English */ }
+  }
+}
 
 export function makeT(getLang) {
   return (key, vars = {}) => {
