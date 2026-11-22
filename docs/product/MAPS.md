@@ -29,7 +29,13 @@ Don't build on the **Google Maps JavaScript API**. Its Essentials tier includes 
 | Google Maps Platform | 10,000 Dynamic Maps loads a month (Essentials) | About $7 per 1,000 |
 | Self-hosted Protomaps | No limit; you pay only for static hosting | — |
 
-## What the app uses now (October 2026)
+## Status (22 Nov 2026): the in-app map was removed
+
+Explore is a list and Directions open Google Maps by pandal name. `app/vendor/leaflet` and
+`app/vendor/protomaps-leaflet` were deleted on 22 Nov 2026 (they're in git history if a map comes back). The
+notes below describe how the map worked in October 2026, for reuse.
+
+## What the app used (October 2026)
 
 **A self-hosted Protomaps vector map.**
 * At deploy time, `scripts/build_tiles.sh` extracts Kolkata and Howrah (zoom 0–15) from the latest Protomaps OpenStreetMap build into one `.pmtiles` file.

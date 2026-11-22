@@ -8,7 +8,7 @@ import json, re, subprocess, sys, urllib.parse, urllib.request
 from pathlib import Path
 
 API = "https://commons.wikimedia.org/w/api.php"
-UA = {"User-Agent": "PujoParikrama/1.0 (https://shubhgptgrowth.github.io/Durga-Puja-2026/; sounds)"}
+UA = {"User-Agent": "PujoParikrama/1.0 (https://ibiplavdas.github.io/Durga-Puja-2026/; sounds)"}
 QUERIES = ["dhak", "dhaki", "dhak drum", "Durga Puja drum", "dhak Durga Puja", "conch shell blowing", "shankha", "shankh", "conch sound",
            "ululation Bengali", "uludhwani", "ulu dhwani", "kansar ghanta", "kasor", "Durga Puja aarti", "Durga Puja dhunuchi", "sandhi puja"]
 

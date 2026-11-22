@@ -25,7 +25,7 @@ from . import config
 from .geo import haversine_m
 from .ingest import ingest
 
-UA = "PujoParikrama/1.0 (+https://github.com/shubhgptgrowth/Durga-Puja-2026)"
+UA = "PujoParikrama/1.0 (+https://github.com/iBiplavDas/Durga-Puja-2026)"
 ENDPOINT = "https://nominatim.openstreetmap.org/search"
 STOPWORDS = {"sarbojanin", "sarbojanin,", "club", "sangha", "the", "of", "kolkata", "salt", "lake", "(suburban)", "metro"}
 

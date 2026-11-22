@@ -7,11 +7,13 @@ Actions: Find Health Samples (Steps, today, grouped by day, so iPhone + Watch ar
 iOS only imports signed shortcuts, so the shortcut workflow signs the output on a macOS runner
 (`shortcuts sign --mode anyone`) and publishes it to app/shortcut/pujo-steps.shortcut.
 """
+import json
 import plistlib
 import sys
 import uuid
+from pathlib import Path
 
-SITE = "https://shubhgptgrowth.github.io/Durga-Puja-2026/"
+SITE = json.loads((Path(__file__).resolve().parent.parent / "site.json").read_text())["url"]
 
 
 def ref(uid, name):

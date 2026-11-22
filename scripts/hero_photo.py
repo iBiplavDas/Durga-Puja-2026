@@ -12,7 +12,7 @@ from PIL import Image
 
 PANDALS = ["bagbazar", "kumartuli_sarbojanin", "sovabazar_rajbari", "md_ali_park", "college_square", "tala_prattoy",
            "ahiritola", "singhi_park", "jagat_mukherjee", "kashi_bose_lane", "simla_byayam", "hatibagan"]
-UA = {"User-Agent": "PujoParikrama/1.0 (https://shubhgptgrowth.github.io/Durga-Puja-2026/; banner photo)"}
+UA = {"User-Agent": "PujoParikrama/1.0 (https://ibiplavdas.github.io/Durga-Puja-2026/; banner photo)"}
 OUT = Path("data/hero_candidates")
 
 def photos():
