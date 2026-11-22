@@ -108,6 +108,7 @@ Priority: **P0** = needed before the Pujo 2027 season starts (July 2027). **P1**
 | P1-4 | **Media kit page (M9)** from the reach report | Brand sales by 1 Jun 2027 | ⬜ |
 | P1-5 | **Committee portal pilot (M6)**: claim your pandal, theme, timings, photos, live count | Data quality and B2B revenue | ⬜ |
 | P1-6 | **Multi-festival engine (M7)**: generalise pandal → venue and puja days → event days, with one data folder per event | Kali Puja, Chandannagar, Book Fair, CR Park, Mumbai Ganesh | ⬜ |
+| P1-8 | **44 px tap targets** for filter chips and the language picker (now 32–36 px; changes the header look) | Older users | ⬜ |
 | P1-7 | Crowd reports: show the live signal on the Plan tab and in route timings once there's enough data | Turns the crowd curve from a model into a measurement | ⬜ |
 
 ### P2: later
