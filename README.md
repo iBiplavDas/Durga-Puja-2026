@@ -6,6 +6,8 @@ A free, mobile-first guide to **Durga Puja 2026 pandal hopping in Kolkata and Ho
 
 It works in English, বাংলা and हिन्दी, installs as an app, and keeps working on weak networks.
 
+> **Taking over?** Start with [docs/HANDOFF.md](docs/HANDOFF.md).
+
 > **Status (November 2026):** the pujo is over. The app now opens with "See you at Pujo 2027" and a WhatsApp reminder sign-up; the guide, articles and routes stay up. Marketing continues on Instagram (Jagaddhatri, Chhath and other festivals). See [Before Pujo 2027](#before-pujo-2027) for what to fix first.
 
 ## What's in it
