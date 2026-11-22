@@ -21,9 +21,9 @@ reminder sign-up, and the Instagram account carries on with other festivals.
 | What | Where |
 |---|---|
 | Live app | https://pujoparikramaguide.in (custom domain on GitHub Pages) |
-| Old mirror | `shubhgptgrowth.github.io/Durga-Puja-2026` — **may be dead**: see the repo move below |
+| Old mirror | `shubhgptgrowth.github.io/Durga-Puja-2026` — **dead (404, checked 22 Nov)**; `ibiplavdas.github.io/Durga-Puja-2026/` redirects to the domain |
 | Daily marketing kit | `/kit/` on the live site; team dashboard at `/kit/dashboard/`, reels catalogue at `/kit/reels/` |
-| Repository | **Moved to `github.com/iBiplavDas/Durga-Puja-2026`** (was `shubhgptgrowth/Durga-Puja-2026`; GitHub redirects pushes). Update `site.json` `pages_url`, the README mirror link and any `shubhgptgrowth` links once the new Pages address is confirmed |
+| Repository | **Moved to `github.com/iBiplavDas/Durga-Puja-2026`** (was `shubhgptgrowth/Durga-Puja-2026`; GitHub redirects pushes). `site.json` `pages_url`, README and script links updated 22 Nov (marketing/ scripts still name the old repo in their user agents) |
 | Working / default branch | `claude/kolkata-durga-puja-guide-4t5xad`. **Every push to it deploys.** Other Claude sessions also work through PRs (`claude/clever-cannon-*` for marketing, `claude/nifty-dijkstra-*`, `claude/cool-bell-*`) that merge into it |
 | Backend | Supabase (project config in `app/config.js`; migrations in `supabase/migrations/`) |
 | Docs | `docs/product/` (roadmap, scope, community backend, SEO, hosting, analytics, AdSense, offers, Google sign-in, iPhone Shortcut, business roadmap) and `docs/marketing/` (plan, strategy, tracker, content, creators, press, social calendar, featured offers) |
@@ -69,7 +69,7 @@ data/raw/*.csv ─► python -m pipeline ─► app/data/guide.json ─► app/ 
 * **`content/knowledge/`** → `scripts/build_seo.py` → crawlable pages, JSON-LD, sitemap, `llms.txt`.
 * **`supabase/migrations/`**: community, growth, traffic, ratings/profiles, contacts, analytics, site counts,
   progress sync, offers/menus, delete-my-data, featured offers, dashboard, reels stats, IG DMs, place popularity,
-  pujo suggestions.
+  pujo suggestions, crowd reports, client errors, moments moderation.
 * **Workflows** (`.github/workflows/`): `pipeline` (tests + freshness), `deploy` (push + 05:45 IST daily + verify),
   `supabase-setup`, `discover`, `geo-audit`, `indexnow`, `analytics-report`, `traffic*`, `offers`, `contacts-export`,
   and the marketing set (`marketing-*`, `reels-factory`, `engage`, `story-check`, `footage-scan`, `music`, `audio`,
@@ -170,7 +170,8 @@ extended to 27 Dec.
 1. **`GOOGLE_MAPS_API_KEY`** (Places API (New), billing on): enables `discover what=google` → `pipeline.pins` to pin all
    169 pandals to their Google listing and store place IDs. ~169 requests per run; expected within Google's free
    allowance but not guaranteed. Alternative: Google Maps share links for the 20–30 most important pandals.
-2. **Confirm the new GitHub Pages address** after the repo move and update `site.json`, README, and old links.
+2. ~~Confirm the new GitHub Pages address~~ done 22 Nov. Still open: printed QR codes that use the dead `shubhgptgrowth` mirror
+   (only that account can restore a redirect), and pointing the domain's DNS CNAMEs at `ibiplavdas.github.io`.
 3. Business decisions in `docs/product/BUSINESS_ROADMAP.md` §5 (business vs passion project, selling now, AdSense,
    second festival, 2027 scope).
 
@@ -186,9 +187,11 @@ extended to 27 Dec.
 
 ### Product backlog carried from `docs/product/ROADMAP.md` (some items are stale — the roadmap itself needs a refresh)
 * Shipped since it was written: custom domain, Hindi UI, map tiles (then the map was removed), 2026 themes plumbing.
-* Still open: error/quota monitoring, add-to-home-screen prompt, crowd report button, Moments moderation view,
-  performance pass (guide.json size), accessibility pass, curated bus routes and auto fares, group plans, a
-  year-in-review page, Bengali names for the 31 `osm-discovered` pandals.
+* Shipped 22 Nov: error monitoring (`analytics.client_errors_daily`, daily report section), crowd report button,
+  Moments moderation (`analytics.moments_queue`, `moderate_moment`), performance and accessibility passes
+  ([PERF_A11Y.md](product/PERF_A11Y.md)). **Run `supabase-setup` after deploying them** so the new RPCs exist.
+* Still open: add-to-home-screen prompt, curated bus routes and auto fares, group plans, a year-in-review page,
+  Bengali names for the 31 `osm-discovered` pandals, 44 px filter chips and language picker.
 * Supabase Pro during the festival was an owner/billing decision.
 
 ### Growth and business (from `BUSINESS_ROADMAP.md`, owner approval pending)
@@ -199,10 +202,8 @@ extended to 27 Dec.
   with the rule that paid placements never change crowd advice.
 
 ### Housekeeping
-* `docs/product/ROADMAP.md` still describes 3 Oct; refresh it from this handoff.
-* README mirror link and `site.json` `pages_url` (repo move).
-* `app/vendor/leaflet` and `protomaps-leaflet` are no longer used by the app (only listed in `sw.js`); remove or keep
-  for a future map.
+* Done 22 Nov: ROADMAP refreshed, repo-move links, unused Leaflet/Protomaps vendor files removed.
+* The ₹100 crore plan to March 2029 is in [product/PLAN_100CR.md](product/PLAN_100CR.md).
 
 ## 9. Quick start for the next owner
 

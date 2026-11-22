@@ -1,6 +1,6 @@
 /* Home: a simple start screen. "What would you like to do?" tasks, areas to pick, and ready-made routes. */
 import { hav, fmtCount, searchEntries } from '../core.js';
-import { S, G, idx, t, store, community, ll, nm, zn, zs, dn, zoneOf, esc, dist, greetDay, btn, icon, bnDigits, loc, plain, todayKey, savePrefs,
+import { S, G, idx, t, store, community, ll, nm, zn, zs, dn, zoneOf, esc, dist, greetDay, btn, rowBtn, icon, bnDigits, loc, plain, todayKey, savePrefs,
 } from '../state.js';
 import { $, go, rerender, toast, getFix, registerView } from '../ui.js';
 import { openPlace } from '../sheets.js';
@@ -36,6 +36,10 @@ const SLIDE_DATA = [
   { src: 'img/hero-5.jpg', pos: '50% 28%', pandal: 'md_ali_park', author: 'Indrajit Das', license: 'CC BY-SA 3.0', page: 'https://commons.wikimedia.org/wiki/File:DurgaPuja2017_-_Durga_Idol_of_Mohammad_Ali_Park_01.jpg' },
 ];
 const slides = () => SLIDE_DATA.filter((x) => idx.pandal[x.pandal]);
+/* On a slow connection (Chrome tells us; Safari doesn't, so it gets the full size) or in low-data mode, the banner
+ * uses the 480px copies (img/hero-N-sm.jpg, from scripts/hero_photo.py): a quarter of the bytes, still sharp on a phone. */
+const slowNet = () => S.prefs.lowData || !!navigator.connection?.saveData || /2g|^3g$/.test(navigator.connection?.effectiveType || '');
+const heroSrc = (x) => (slowNet() ? x.src.replace(/\.jpg$/, '-sm.jpg') : x.src);
 let slide = 0, slideTimer = null;
 
 const span = () => { const o = { day: 'numeric' }, a = new Date(idx.day.shashthi.date + 'T00:00:00'), b = new Date(idx.day.dashami.date + 'T00:00:00');
@@ -50,7 +54,7 @@ function heroHtml() {
   const when = today ? t('h.todayIs', { day: esc(dn(today)) }) : diff > 0 ? t('h.countdown', { n: bnDigits(diff) }) : over ? t('rm.when') : t('h.planning');
   return `<div class="hero slides" role="group" aria-roledescription="carousel" aria-label="${t('h.heroAlt', { place: '' })}">
     ${SLIDES.map((x, k) => `<button type="button" class="slide ${k === slide ? 'on' : ''}" data-slide="${k}" data-place="${x.pandal}" aria-label="${esc(nm(idx.pandal[x.pandal]))}">
-      <img ${k === slide ? `src="${x.src}" fetchpriority="high"` : `data-src="${x.src}"`} alt="${t('h.heroAlt', { place: esc(nm(idx.pandal[x.pandal])) })}" style="object-position:${x.pos}" decoding="async"></button>`).join('')}
+      <img ${k === slide ? `src="${heroSrc(x)}" fetchpriority="high"` : `data-src="${heroSrc(x)}"`} alt="${t('h.heroAlt', { place: esc(nm(idx.pandal[x.pandal])) })}" style="object-position:${x.pos}" decoding="async"></button>`).join('')}
     <div class="hero-shade"></div>
     <div class="hero-copy">
       <div class="sharad-greet">${plain(t(today ? 'lingo.heroToday' : diff > 0 ? 'lingo.hero' : 'lingo.after'))}</div>
@@ -253,7 +257,7 @@ function wire(el) {
       const p = r.kind === 'zone' ? idx.zone[r.id] : idx[r.kind][r.id];
       const name = r.kind === 'zone' ? zn(p) : r.kind === 'pandal' ? nm(p) : p.name;
       const meta = r.kind === 'zone' ? t('z.pandals', { n: p.pandal_ids.length }) : `${t('kindLabel.' + r.kind)} · ${esc(zs(idx.zone[p.zone]))}`;
-      return `<li data-result="${r.id}" data-kind="${r.kind}" ${btn()}><span class="kind">${icon(kindIcon[r.kind], 'sm')}</span><span><div class="nm">${esc(name)}</div><div class="meta">${meta}</div></span></li>`;
+      return `<li data-result="${r.id}" data-kind="${r.kind}"><span class="kind">${icon(kindIcon[r.kind], 'sm')}</span><span><div class="nm">${rowBtn(esc(name))}</div><div class="meta">${meta}</div></span></li>`;
     }).join('') || (input.value.trim().length >= 2 ? `<li class="muted">${t('h.noResults')} <button type="button" class="link-btn" data-suggest data-name="${esc(input.value.trim())}">${t('sg.short')}</button></li>` : '');
   };
 }

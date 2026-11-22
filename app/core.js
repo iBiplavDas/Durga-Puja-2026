@@ -328,3 +328,15 @@ export function passPhase({ lastCollect, until }, now = new Date()) {
   if (now > day(until)) return null;
   return now > day(lastCollect) ? 'late' : 'open';
 }
+
+/* "How's the queue here?" reports (supabase/migrations/*_crowd_reports.sql, crowd_now): what the app may say.
+ * Nothing below `min` reports: a couple of voices can mislead more than they help. "Mostly X" only when more than
+ * half the people say X; otherwise the reports are mixed and the counts are shown as they are. */
+export const QUEUE_LEVELS = ['short', 'medium', 'long'];
+export function crowdSummary(agg, { min = 3 } = {}) {
+  const counts = Object.fromEntries(QUEUE_LEVELS.map((k) => [k, Math.max(0, Math.floor(+agg?.[k] || 0))]));
+  const n = QUEUE_LEVELS.reduce((s, k) => s + counts[k], 0);
+  if (n < min) return null;
+  const level = QUEUE_LEVELS.find((k) => counts[k] * 2 > n) || null;
+  return { n, level, counts };
+}

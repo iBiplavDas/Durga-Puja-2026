@@ -26,7 +26,7 @@ def url():
 
 
 def display(u=None):
-    """'pujoparikrama.in' or 'shubhgptgrowth.github.io/Durga-Puja-2026', for printing on cards."""
+    """'pujoparikrama.in' or 'ibiplavdas.github.io/Durga-Puja-2026', for printing on cards."""
     p = urlparse(u or url())
     return (p.netloc + p.path).rstrip("/")
 

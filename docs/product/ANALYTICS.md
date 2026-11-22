@@ -62,6 +62,26 @@ Supabase dashboard → **Table editor → schema `analytics`** (or SQL editor). 
 
 None of these can be read with the app's public key (tested in `tests/sql/analytics_test.sql`).
 
+## App errors
+
+`app/errors.js` (loaded first) catches uncaught errors and unhandled promise rejections on phones and sends each
+one to `log_client_error()`: the message (cut to 300 characters, e-mails, long numbers and token-like strings
+masked), the script file and line without its query string, the data version, the browser family and major
+version (never the full user-agent), the screen and the page path. **No device id, account, name or location.**
+Each distinct error is sent once per page load and at most 10 per load; ResizeObserver warnings, browser-extension
+errors and cross-origin "Script error." are dropped. If the RPC isn't there yet, the app goes quiet. The server
+truncates and masks again, ignores everything once 5,000 reports arrived in the last hour (so it can't fill the
+database or run up egress), and keeps 30 days (`supabase/migrations/*_client_errors.sql`).
+
+* **During a festival night:** Table editor → schema `analytics` → **`client_errors_daily`**: one row per day
+  (IST), message and file, with how often, first and last seen, and which browsers, screens, data versions and
+  lines. A new message right after a deploy, or one only on one browser, is the thing to chase. Raw rows are in
+  `public.client_errors` (SQL editor).
+* **Every day:** the **analytics-report** run ends with *Errors (last 24 h)*, the top 10 with counts, and the
+  database and moments-storage size against the Free plan (500 MB, 1 GB). Egress and monthly active users have no
+  cheap API, so check them under Supabase → Usage. Error text in the summary is shortened and shown as code, but
+  it comes from browsers, so read it as untrusted.
+
 A daily summary also lands in **Actions → analytics-report** (22:10 IST, or run it by hand with any number of
 days). It holds aggregates only. Note that the repo is public, so anyone can read that summary; if that's a
 concern, use the dashboard views instead and disable the schedule.

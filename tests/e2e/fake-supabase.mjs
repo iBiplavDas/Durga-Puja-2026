@@ -12,7 +12,7 @@ const istDay = (d = new Date()) => new Date(d.getTime() + 5.5 * 3600e3).toISOStr
 export function startFakeSupabase({ guidePath, port = 0 }) {
   const g = JSON.parse(readFileSync(guidePath, 'utf8'));
   const places = new Map([...g.pandals.map((p) => [p.id, { ...p, kind: 'pandal' }]), ...g.food.map((f) => [f.id, { ...f, kind: 'food' }])]);
-  const db = { tokens: new Map(), visits: [], photos: [], likes: new Set(), reports: new Set(), files: new Map(), opens: new Map(), ratings: new Map(), profiles: new Map(), progress: new Map(), members: new Map(), offers: [], suggestions: [], events: [], presence: new Map(), offline: false, google: null };
+  const db = { tokens: new Map(), visits: [], photos: [], likes: new Set(), reports: new Set(), files: new Map(), opens: new Map(), ratings: new Map(), profiles: new Map(), progress: new Map(), members: new Map(), offers: [], suggestions: [], clientErrors: [], crowd: [], events: [], presence: new Map(), offline: false, google: null };
 
   const json = (res, code, body) => { res.writeHead(code, { 'Content-Type': 'application/json', ...cors }); res.end(JSON.stringify(body)); };
   const cors = { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Headers': 'apikey, authorization, content-type, x-upsert, cache-control, prefer', 'Access-Control-Allow-Methods': 'GET, POST, DELETE, OPTIONS' };
@@ -121,6 +121,13 @@ export function startFakeSupabase({ guidePath, port = 0 }) {
       db.offers.push(o);
       return { status: 'pending', id: o.id };
     },
+    // The error beacon (app/errors.js); granted to anon. Kept so the smoke test can check what was sent.
+    log_client_error(uid, a) {
+      if (!String(a.p_message || '').trim()) return { status: 'ignored' };
+      db.clientErrors.push({ message: String(a.p_message).slice(0, 300), source: a.p_source ?? null, line: a.p_line ?? null, col: a.p_col ?? null,
+        kind: a.p_kind === 'rejection' ? 'rejection' : 'error', version: a.p_version ?? null, browser: a.p_browser ?? null, view: a.p_view ?? null, page: a.p_page ?? null });
+      return { status: 'ok' };
+    },
     suggest_pujo(uid, a) {
       if (String(a.p_name || '').trim().length < 3) return { status: 'bad_name' };
       if (String(a.p_area || '').trim().length < 2) return { status: 'bad_area' };
@@ -132,6 +139,25 @@ export function startFakeSupabase({ guidePath, port = 0 }) {
       db.suggestions.push(o);
       return { status: 'pending', id: o.id };
     },
+    // "How's the queue here?" (*_crowd_reports.sql): last 45 min, one vote per person (their latest), no ids.
+    crowd_now(uid, a) {
+      const latest = new Map();
+      for (const r of db.crowd) if (r.place_id === a.p_place && Date.now() - r.at < 45 * 60e3) latest.set(r.user, r.level);
+      const v = [...latest.values()], n = (k) => v.filter((x) => x === k).length;
+      return { reports: v.length, short: n('short'), medium: n('medium'), long: n('long'), window_min: 45 };
+    },
+    report_crowd(uid, a) {
+      if (!['short', 'medium', 'long'].includes(a.p_level)) return { status: 'bad_level' };
+      const p = places.get(a.p_place); if (!p) return { status: 'unknown_place' };
+      if (p.kind !== 'pandal') return { status: 'not_pandal' };
+      if (a.p_lat == null || a.p_lng == null) return { status: 'no_location' };
+      const [d, ok] = near(p, a.p_lat, a.p_lng, a.p_accuracy);
+      if (!ok) return { status: 'too_far', distance_m: Math.round(d) };
+      if (db.crowd.some((x) => x.user === uid && x.place_id === p.id && Date.now() - x.at < 20 * 60e3)) return { status: 'too_soon', ...rpc.crowd_now(uid, a) };
+      if (db.crowd.filter((x) => x.user === uid && Date.now() - x.at < 864e5).length >= 30) return { status: 'rate_limited' };
+      db.crowd.push({ user: uid, place_id: p.id, level: a.p_level, at: Date.now(), distance_m: Math.round(d) });
+      return { status: 'ok', ...rpc.crowd_now(uid, a) };
+    },
     delete_my_data(uid) {
       const code = db.members.get(uid);
       if (code) { db.progress.delete(code); for (const [u, c] of db.members) if (c === code) db.members.delete(u); }
@@ -140,6 +166,7 @@ export function startFakeSupabase({ guidePath, port = 0 }) {
       const mine = db.photos.filter((x) => x.user === uid);
       db.photos = db.photos.filter((x) => x.user !== uid);
       db.visits = db.visits.filter((x) => x.user !== uid);
+      db.crowd = db.crowd.filter((x) => x.user !== uid);
       if (db.google === uid) db.google = null;
       for (const [tok, u] of db.tokens) if (u === uid) db.tokens.delete(tok);
       return { status: 'ok', files: mine.flatMap((x) => [x.path, x.thumb_path]) };
@@ -174,7 +201,7 @@ export function startFakeSupabase({ guidePath, port = 0 }) {
     if (db.offline && !url.pathname.startsWith('/__')) { req.socket.destroy(); return; }
     const p = url.pathname;
     if (p === '/__crowd') { db.extraLive = +url.searchParams.get('live') || 0; db.extraPeople = +url.searchParams.get('people') || 0; return json(res, 200, {}); }
-    if (p === '/__state') return json(res, 200, { offers: db.offers, suggestions: db.suggestions, progress: Object.fromEntries(db.progress), events: db.events, ratings: db.ratings.size, profiles: [...db.profiles.values()], visits: db.visits.length, photos: db.photos.length, files: db.files.size, opens: [...db.opens.values()] });
+    if (p === '/__state') return json(res, 200, { offers: db.offers, suggestions: db.suggestions, clientErrors: db.clientErrors, progress: Object.fromEntries(db.progress), events: db.events, ratings: db.ratings.size, profiles: [...db.profiles.values()], visits: db.visits.length, crowd: db.crowd.map(({ user, ...r }) => r), photos: db.photos.length, files: db.files.size, opens: [...db.opens.values()] });
     // The Google consent screen, answered at once: link the guest, or sign in to the account it's linked to.
     if (p === '/__google') {
       const back = url.searchParams.get('redirect_to'), uid = url.searchParams.get('uid');
@@ -188,6 +215,9 @@ export function startFakeSupabase({ guidePath, port = 0 }) {
       }
       res.writeHead(302, { Location: to, ...cors }); return res.end();
     }
+    // Other people's queue reports at a pandal (n people, each saying `level`), and "migration not applied yet".
+    if (p === '/__crowdSeed') { for (let i = 0; i < (+url.searchParams.get('n') || 1); i++) db.crowd.push({ user: randomUUID(), place_id: url.searchParams.get('place'), level: url.searchParams.get('level'), at: Date.now() }); return json(res, 200, { n: db.crowd.length }); }
+    if (p === '/__noCrowd') { db.noCrowd = url.searchParams.get('on') === '1'; return json(res, 200, { noCrowd: db.noCrowd }); }
     if (p === '/__approveOffers') { db.offers.forEach((o) => (o.status = 'approved')); return json(res, 200, { n: db.offers.length }); }
     if (p === '/__featureOffers') { db.offers.forEach((o) => { o.status = 'approved'; o.featured_until = o.valid_to; }); return json(res, 200, { n: db.offers.length }); }
     if (p === '/__offline') { db.offline = url.searchParams.get('on') === '1'; return json(res, 200, { offline: db.offline }); }
@@ -232,7 +262,8 @@ export function startFakeSupabase({ guidePath, port = 0 }) {
     }
     if (p.startsWith('/rest/v1/rpc/') && req.method === 'POST') {
       const name = p.slice('/rest/v1/rpc/'.length), uid = uidOf(req);
-      if (!uid && !['track_open', 'track', 'site_counts'].includes(name)) return json(res, 401, { message: 'JWT required' });  // granted to anon
+      if (!uid && !['track_open', 'track', 'site_counts', 'log_client_error', 'crowd_now'].includes(name)) return json(res, 401, { message: 'JWT required' });  // granted to anon
+      if (db.noCrowd && ['crowd_now', 'report_crowd'].includes(name)) return json(res, 404, { code: 'PGRST202', message: `Could not find the function public.${name}` });
       const fn = rpc[name]; if (!fn) return json(res, 404, { message: 'no such function' });
       return json(res, 200, fn(uid, JSON.parse(await body(req) || '{}')));
     }

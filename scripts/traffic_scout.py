@@ -10,7 +10,7 @@ from pathlib import Path
 
 BASE = "https://kolkatatrafficpolice.gov.in/"
 PAGES = ["", "notification.php", "notifications.php", "notice.php", "trafficadvisory.php", "advisory.php", "press.php", "news.php", "whatsnew.php"]
-UA = {"User-Agent": "Mozilla/5.0 (compatible; PujoParikrama/1.0; +https://shubhgptgrowth.github.io/Durga-Puja-2026/)"}
+UA = {"User-Agent": "Mozilla/5.0 (compatible; PujoParikrama/1.0; +https://ibiplavdas.github.io/Durga-Puja-2026/)"}
 RELEVANT = re.compile(r"puja|pujo|durga|mahalaya|immersion|bisarjan|visarjan|festiv|carnival|traffic (?:arrangement|restriction|regulation)|diversion|advisory|notification", re.I)
 
 class Links(HTMLParser):

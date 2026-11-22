@@ -6,7 +6,9 @@ import {
   routeUrls, isOpen, hhmm, encodePlan, decodePlan, parseSteps, mergeProgress, embedUrl,
 } from '../../app/core.js';
 import { dietMatch, hasEgg, cost2 } from '../../app/foodinfo.js';
-import { STR } from '../../app/i18n.js';
+import { STR, loadLang } from '../../app/i18n.js';
+
+await loadLang('hi'); // Hindi loads on demand in the app
 
 const G = JSON.parse(readFileSync(new URL('../../app/data/guide.json', import.meta.url)));
 const ll = (r) => [r.lat, r.lng];
@@ -141,7 +143,7 @@ test('bundle has Bengali names for every pandal, zone and day', () => {
 });
 
 /* ---------------- community-era helpers ---------------- */
-import { fmtCount, timeAgo, searchEntries, nearest, VIBES, vibeOf, passPhase } from '../../app/core.js';
+import { fmtCount, timeAgo, searchEntries, nearest, VIBES, vibeOf, passPhase, QUEUE_LEVELS, crowdSummary } from '../../app/core.js';
 import { readdirSync } from 'node:fs';
 
 test('fmtCount compacts large numbers', () => {
@@ -205,7 +207,7 @@ test('every translation key used in the app exists in both languages', () => {
     'ff.': ['veg', 'nonveg', 'egg', 'sweets', 'street', 'open'], 'hs.ios': ['1', '2', '3', '4'],
     'rt.': ['tasty', 'value', 'quick', 'clean', 'friendly', 'crowded', 'pricey', 'slow'], 'm.err.': ['too_big', 'too_long', 'unsupported', 'server'],
     'b.': ['first', 'five', 'fifteen', 'thirty', 'zone', 'k10', 'ashtami', 'dawn', 'owl', 'foodie', 'ns', 'goal', 'lens'],
-    'vibe.': VIBES, 'pass.': ['collect', 'deliver'],
+    'vibe.': VIBES, 'pass.': ['collect', 'deliver'], 'qr.lv.': QUEUE_LEVELS,
   };
   for (const [prefix, ids] of Object.entries(families)) for (const id of ids) used.add(prefix + id);
   const missing = [...used].filter((k) => !STR.en[k] || !STR.bn[k] || !STR.hi[k]);
@@ -316,4 +318,16 @@ test('the VIP pass card changes after collection closes and goes after Navami', 
   assert.equal(passPhase(w, new Date('2026-10-15T09:00:00')), 'late');
   assert.equal(passPhase(w, new Date('2026-10-20T23:00:00')), 'late');
   assert.equal(passPhase(w, new Date('2026-10-21T08:00:00')), null);
+});
+
+test('queue reports: nothing under 3 people, "mostly" only with a majority', () => {
+  assert.equal(crowdSummary(null), null);
+  assert.equal(crowdSummary({ reports: 2, short: 2, medium: 0, long: 0 }), null, 'two voices are not enough');
+  assert.deepEqual(crowdSummary({ reports: 5, short: 4, medium: 1, long: 0, window_min: 45 }), { n: 5, level: 'short', counts: { short: 4, medium: 1, long: 0 } });
+  assert.equal(crowdSummary({ short: 1, medium: 1, long: 1 }).level, null, 'a three-way split is mixed');
+  assert.equal(crowdSummary({ short: 2, medium: 0, long: 2 }).level, null, 'a tie is mixed');
+  assert.equal(crowdSummary({ short: 3, medium: 2, long: 2 }).level, null, 'the most, but not a majority, is still mixed');
+  assert.equal(crowdSummary({ short: 0, medium: 1, long: 2 }).level, 'long');
+  assert.equal(crowdSummary({ short: -4, medium: 'x', long: 3 }).n, 3, 'junk counts are ignored');
+  assert.equal(crowdSummary({ short: 2, medium: 0, long: 0 }, { min: 2 }).level, 'short');
 });

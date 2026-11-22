@@ -33,7 +33,8 @@ for (let i = 0; i < 50; i++) { try { await fetch(base); break; } catch { await n
 
 const at = (id) => ({ latitude: P[id].lat, longitude: P[id].lng, accuracy: 10 });
 const browser = await chromium.launch({ executablePath: process.env.CHROME_PATH || undefined });
-const ctx = await browser.newContext({ ...devices['iPhone 13'], geolocation: at('tridhara'), permissions: ['geolocation'] });
+// Newer Chromium has DeviceMotionEvent.requestPermission (as iOS does); it answers "granted" only with the motion sensors allowed.
+const ctx = await browser.newContext({ ...devices['iPhone 13'], geolocation: at('tridhara'), permissions: ['geolocation', 'accelerometer', 'gyroscope'] });
 // The paid featured option ships switched off (priceInr 0); switch it on here so its flow stays tested.
 await ctx.addInitScript((cfg) => { window.PP_CONFIG = { community: cfg, featured: { priceInr: 1999 } }; }, { url: backend.url, anonKey: backend.anonKey });
 const page = await ctx.newPage();
@@ -175,6 +176,24 @@ try {
   await shot('03-checked-in');
   await closeSheet();
 
+  // "How's the queue here?" at Tridhara: three big buttons beside the crowd estimate. What people say shows only from
+  // 3 people (here: 2 others + this phone), and the estimate stays as it is.
+  if (fake) await fetch(`${fake.url}/__crowdSeed?place=tridhara&level=long&n=2`);
+  await page.fill('#homeSearch', 'tridh');
+  await page.click('#homeResults li[data-result="tridhara"]');
+  await page.waitForSelector('.sheet.open #queueBox:not([hidden]) [data-queue="long"]');
+  if (fake) must(await count('.sheet.open .queue-say') === 0, 'two reports must not be shown');
+  await page.click('.sheet.open [data-queue="long"]');
+  await page.waitForSelector('.sheet.open .queue-thanks');
+  if (fake) {
+    const said = await page.locator('.sheet.open .queue-say').innerText();
+    must(/mostly Long \(3 people/.test(said), 'what people say after reporting: ' + said);
+    must((await (await fetch(`${fake.url}/__state`)).json()).crowd.some((r) => r.place_id === 'tridhara' && r.level === 'long' && r.distance_m != null), 'queue report not stored');
+  }
+  must(await count('.sheet.open .btn-row .pill.quiet, .sheet.open .btn-row .pill.moderate, .sheet.open .btn-row .pill.busy, .sheet.open .btn-row .pill.packed') === 1, 'the crowd estimate pill should stay');
+  await page.locator('.sheet.open #queueBox').scrollIntoViewIfNeeded(); await shot('03c-queue-report');
+  await closeSheet();
+
   // Too far: Bagbazar from Lake Market is refused publicly, but can be kept privately
   await page.click('.tab[data-view="explore"]');
   // Explore is a list only: no in-app map
@@ -183,6 +202,17 @@ try {
   must(await page.locator('#map, #modeBtn, .leaflet-container').count() === 0, 'Explore should have no map');
   await page.selectOption('#areaSelect', 'a:north');
   must(await count('#explorePanel .item') === G.zones.find((z) => z.id === 'north').pandal_ids.length, 'area filter count');
+  // Keyboard: the place name is a real button; the page that opens is a named dialog, Tab stays inside it, and Escape
+  // closes it and puts focus back on the button.
+  await page.focus('#explorePanel .item[data-place="bagbazar"] .row-btn');
+  await page.keyboard.press('Enter');
+  await page.waitForSelector('.sheet.open');
+  must(await page.evaluate(() => !!document.querySelector('#sheet').getAttribute('aria-labelledby')), 'the page (dialog) has no name');
+  for (let i = 0; i < 6; i++) await page.keyboard.press('Tab');
+  must(await page.evaluate(() => document.querySelector('#sheet').contains(document.activeElement)), 'Tab left the open page');
+  await page.keyboard.press('Escape');
+  await page.waitForFunction(() => document.activeElement?.closest('[data-place="bagbazar"]'), null, { timeout: 3000 })
+    .catch(() => { throw new Error('focus did not return to the pandal after closing its page'); });
   await page.click('#explorePanel .item[data-place="bagbazar"]');
   // Puja-day chips on the page: footfall follows the chosen day (today's pujo day, or Saptami before the pujo)
   await page.waitForSelector('.sheet.open .day-toggle [data-sday][aria-checked="true"]');
@@ -201,6 +231,10 @@ try {
   await page.click('#privBtn');
   await page.waitForTimeout(300);
   must((await statFor('bagbazar')).visits === 0, 'a too-far visit must not count publicly');
+  // Queue reports need you at the pandal too
+  await page.click('.sheet.open #queueBox:not([hidden]) [data-queue="short"]');
+  await waitToast(/queue when you're at the pandal/, 'too-far queue report');
+  if (fake) must(!(await (await fetch(`${fake.url}/__state`)).json()).crowd.some((r) => r.place_id === 'bagbazar'), 'a too-far queue report must not be stored');
   await closeSheet();
 
   // "I ate here" at a food spot, standing at it
@@ -695,13 +729,45 @@ try {
   }
   await closeSheet();
 
+  // Error beacon: an uncaught error is sent once (deduped), with a clean source and no query string or user agent.
+  if (fake) {
+    await page.evaluate(() => {
+      const ev = () => new ErrorEvent('error', { message: 'smoke beacon check', filename: location.origin + '/app.js?v=9', lineno: 7, colno: 3 });
+      dispatchEvent(ev()); dispatchEvent(ev());
+      dispatchEvent(new ErrorEvent('error', { message: 'ResizeObserver loop limit exceeded' }));
+    });
+    await page.waitForTimeout(400);
+    const ce = (await (await fetch(`${fake.url}/__state`)).json()).clientErrors.filter((x) => x.message === 'smoke beacon check');
+    must(ce.length === 1 && ce[0].source === '/app.js' && ce[0].line === 7 && ce[0].view && ce[0].browser && !/Mozilla/.test(ce[0].browser), 'error beacon: ' + JSON.stringify(ce));
+    const all = (await (await fetch(`${fake.url}/__state`)).json()).clientErrors;
+    must(!all.some((x) => /ResizeObserver/.test(x.message)), 'error beacon should drop ResizeObserver noise');
+    must(all.length === 1, 'the app itself reported errors: ' + JSON.stringify(all));
+  }
+
+  // Before the crowd_reports migration is applied (crowd_now unknown, 404): the pandal page works and the question stays hidden
+  if (fake) {
+    await fetch(`${fake.url}/__noCrowd?on=1`);
+    const pq = await ctx.newPage();
+    pq.on('pageerror', (e) => errors.push('pageerror (no crowd rpc): ' + e.message));
+    await pq.goto(base + '#p=sreebhumi');
+    await pq.waitForSelector('.sheet.open #visitBtn');
+    await pq.waitForTimeout(800);
+    must(await pq.locator('.sheet.open #queueBox:not([hidden])').count() === 0, 'the queue question should stay hidden without the RPC');
+    must(await pq.locator('.sheet.open .sheet-cta a.primary').count() === 1, 'the pandal page should still render without the RPC');
+    await pq.close();
+    await fetch(`${fake.url}/__noCrowd?on=0`);
+  }
+
   // Bengali, dark mode, offline reload
   await page.selectOption('#langSelect', 'bn');
   must((await page.locator('#tab-home span').innerText()) === 'হোম', 'tabs not translated');
   await page.click('.tab[data-view="home"]');
   await shot('12-home-bn');
   await page.selectOption('#langSelect', 'hi');
-  must((await page.locator('#tab-home span').innerText()) === 'होम', 'tabs not translated to Hindi');
+  // Hindi strings load on demand (i18n.js loadLang), so give them a moment.
+  must(await page.waitForFunction(() => document.querySelector('#tab-home span').textContent === 'होम', null, { timeout: 5000 }).then(() => true, () => false),
+    'tabs not translated to Hindi');
+  must(await page.evaluate(() => document.documentElement.lang) === 'hi', '<html lang> not switched to Hindi');
   await shot('12b-home-hi');
   await page.selectOption('#langSelect', 'en');
   await page.emulateMedia({ colorScheme: 'dark' });

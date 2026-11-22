@@ -1,7 +1,9 @@
 /* Pujo Parikrama 2026: entry point. Loads the guide data, wires up the shell and the
  * community sync, then hands off to the views in ./views. */
+import './errors.js'; // first, so it is listening before anything else loads
 import { decodePlan, parseSteps } from './core.js';
 import { S, G, idx, t, store, community, loadGuide, dn, todayKey, greetDay, savePrefs, bnDigits, loc } from './state.js';
+import { loadLang } from './i18n.js';
 import { dayRec, saveHistory } from './actions.js';
 import { $, $$, go, rerender, toast, setupSheet, setupA11y, VIEWS, sheetIsOpen} from './ui.js';
 import './views/home.js';
@@ -31,9 +33,12 @@ function syncSteps(s) {
 
 async function boot() {
   document.getElementById('seo-static')?.remove(); // plain-HTML summary for crawlers without JavaScript (scripts/build_seo.py)
+  const langP = loadLang(S.prefs.lang); // Hindi strings load only for people who chose Hindi
   let g;
-  try { g = await (await fetch('data/guide.json', { cache: 'no-cache' })).json(); }
-  catch { $('#main').innerHTML = `<p class="empty">${t('load.fail')}</p>`; return; }
+  // index.html starts the download early (window.ppGuide); ask again if that didn't work.
+  try { g = (await window.ppGuide) || await (await fetch('data/guide.json', { cache: 'no-cache' })).json(); }
+  catch { await langP; $('#main').innerHTML = `<p class="empty">${t('load.fail')}</p>`; return; }
+  await langP;
   loadGuide(g);
 
   const prev = store.get('dataVersion', null);
@@ -107,7 +112,11 @@ function setupCommunity() {
 }
 
 function setupHeader() {
-  $('#langSelect').onchange = (e) => { S.prefs.lang = e.target.value; track('lang', { d: e.target.value }); savePrefs(); applyStatic(); rerender(); };
+  $('#langSelect').onchange = async (e) => {
+    const lang = e.target.value;
+    await loadLang(lang);
+    S.prefs.lang = lang; track('lang', { d: lang }); savePrefs(); applyStatic(); rerender();
+  };
 }
 
 /* Static text in index.html carries data-i18n keys; the views re-render themselves. */
@@ -119,6 +128,8 @@ function applyStatic(full = true) {
   $('#langSelect').setAttribute('aria-label', t('lang.aria'));
   $('#sheetClose').setAttribute('aria-label', t('sheet.close'));
   $('#fabAdd').setAttribute('aria-label', t('m.add'));
+  $('#sosBtn').setAttribute('aria-label', t('sos.open'));
+  $('.tabbar').setAttribute('aria-label', t('tab.aria'));
   const now = new Date(); now.setHours(0, 0, 0, 0);
   const shashthi = new Date(idx.day.shashthi.date + 'T00:00:00'), dashami = new Date(idx.day.dashami.date + 'T00:00:00');
   const todayDay = greetDay(), diff = Math.round((shashthi - now) / 864e5);

@@ -1,7 +1,16 @@
 # Hosting on a custom domain
 
-**Today:** the app is on GitHub Pages at `https://shubhgptgrowth.github.io/Durga-Puja-2026/`.
-**Goal:** a short address (for example `pujoparikrama.in`) that's easy to say on posters, and enough bandwidth for lakhs of visitors.
+**Today (22 Nov 2026):** the app is live at **https://pujoparikramaguide.in/** (GitHub Pages, custom domain).
+After the repo moved to `iBiplavDas/Durga-Puja-2026`, the GitHub Pages address is
+`https://ibiplavdas.github.io/Durga-Puja-2026/`, and it 301-redirects to the custom domain (checked 22 Nov 2026).
+**The old `shubhgptgrowth.github.io/Durga-Puja-2026/` address now returns 404**, so printed QR codes and old links that used
+it are broken. They can only be revived from the `shubhgptgrowth` account (a small Pages repo named `Durga-Puja-2026`
+whose `index.html` redirects to the domain, keeping the query string and `#p=` hash).
+
+If the DNS records below still point at `shubhgptgrowth.github.io`, change both CNAME targets to `ibiplavdas.github.io`.
+GitHub serves the domain either way today, but the records should name the account that owns the repo.
+
+The original plan follows.
 
 ## Recommendation: GitHub Pages + your domain, with Cloudflare in front
 
@@ -32,8 +41,8 @@
 
    | Type | Name | Target |
    |---|---|---|
-   | CNAME | `@` | `shubhgptgrowth.github.io` |
-   | CNAME | `www` | `shubhgptgrowth.github.io` |
+   | CNAME | `@` | `ibiplavdas.github.io` |
+   | CNAME | `www` | `ibiplavdas.github.io` |
 
 4. **Switch the app over.** Tell Claude the domain, or run `python scripts/site.py set https://<domain>/` and push. The deploy then sets the custom domain on GitHub Pages.
    * If the `domain` job warns that it couldn't, set it by hand: repo **Settings → Pages → Custom domain** = `<domain>` → Save.

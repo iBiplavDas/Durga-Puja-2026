@@ -1,11 +1,11 @@
 /* Detail sheets: pandal, eatery, parking, moment viewer, and the upload flow. */
-import { hav, fmtCount, isOpen, hoursOf, nearest, timeAgo, vibeOf } from './core.js';
+import { hav, fmtCount, isOpen, hoursOf, nearest, timeAgo, vibeOf, crowdSummary, QUEUE_LEVELS } from './core.js';
 import {
   S, G, idx, t, store, community, ll, M, nm, zn, dn, zoneOf, placeOf, placeKind, esc, km, dist, ampm,
-  crowdIndex, crowdWord, crowdColor, crowdLevel, dayFactor, btn, icon, savePrefs,
+  crowdIndex, crowdWord, crowdColor, crowdLevel, dayFactor, rowBtn, icon, savePrefs,
 } from './state.js';
 import { openSheet, closeSheet, toast, go, getFix, rerender, $ } from './ui.js';
-import { visit, visitPrivately, visitMessage, visitedToday, celebrateVisit } from './actions.js';
+import { visit, visitPrivately, visitMessage, visitedToday, celebrateVisit, allowedDistance } from './actions.js';
 import { prepareMedia } from './media.js';
 import { CONFIG } from './config.js';
 import { shareCtaHtml, wireShareCta } from './growth.js';
@@ -163,6 +163,59 @@ function wireVisit(el, id, reopen) {
   };
 }
 
+/* ---------------- "How's the queue here?": people at a pandal say Short / Medium / Long ----------------
+ * Beside the crowd model (the pill above it), never instead of it. "People here say…" shows only from 3 people in the
+ * last 45 minutes (core.js crowdSummary): no signal beats a misleading one. The box stays hidden until the server
+ * answers, so before the crowd_reports migration is applied (community.crowdMissing) the page simply hasn't got it.
+ * Reporting needs a fresh GPS fix at the pandal, like a check-in; the server checks the distance again. */
+const queueWord = (k) => t('qr.lv.' + k);
+function queueSayHtml(agg) {
+  const s = crowdSummary(agg);
+  if (!s) return '';
+  const line = s.level ? t('qr.peopleSay', { level: queueWord(s.level), n: fmtCount(s.n) })
+    : t('qr.mixed', { counts: QUEUE_LEVELS.filter((k) => s.counts[k]).map((k) => `${queueWord(k)} ${fmtCount(s.counts[k])}`).join(', ') });
+  return `<p class="queue-say">${s.level ? `<span class="dot q-${s.level}"></span>` : ''}<b>${line}</b></p><p class="fine">${t('qr.note')}</p>`;
+}
+const queueThanksHtml = (text) => `<p class="queue-thanks">${icon('check', 'sm')} ${text}</p>`;
+function queueAskHtml(id) {
+  const mine = community.myCrowdReport(id);
+  if (mine) return queueThanksHtml(t('qr.thanks', { level: queueWord(mine.level) }));
+  return `<p class="queue-q">${t('qr.q')}</p>
+    <div class="queue-btns" role="group" aria-label="${t('qr.q')}">${QUEUE_LEVELS.map((k) => `<button type="button" class="btn queue-btn" data-queue="${k}"><span class="dot q-${k}"></span>${queueWord(k)}</button>`).join('')}</div>
+    <p class="fine">${t('qr.sub')}</p>`;
+}
+function queueBoxHtml(id) {
+  if (!community.enabled || community.crowdMissing) return '';
+  return `<section class="queue-box" id="queueBox" hidden><div id="queueAsk">${queueAskHtml(id)}</div><div id="queueSay"></div></section>`;
+}
+function wireQueue(el, id) {
+  const box = $('#queueBox', el); if (!box) return;
+  const say = $('#queueSay', el), ask = $('#queueAsk', el);
+  community.crowdNow(id).then((agg) => { if (agg) { box.hidden = false; say.innerHTML = queueSayHtml(agg); } }).catch(() => { /* offline: leave it out */ });
+  box.onclick = async (e) => {
+    const b = e.target.closest('[data-queue]'); if (!b) return;
+    const level = b.dataset.queue, btns = [...box.querySelectorAll('[data-queue]')], label = b.innerHTML;
+    const reset = () => { btns.forEach((x) => (x.disabled = false)); b.innerHTML = label; };
+    btns.forEach((x) => (x.disabled = true)); b.innerHTML = `${icon('locate', 'sm')} ${t('v.locatingShort')}`;
+    let f;
+    // Always a fresh fix, as for check-ins: a cached one could be from before you walked up to the pandal.
+    try { f = await getFix({ maximumAge: 0 }); } catch (err) { reset(); return toast(err?.code === 'denied' ? t('fit.denied') : t('v.noFix'), 4000); }
+    const p = placeOf(id), d = hav([f.lat, f.lng], ll(p));
+    if (d > allowedDistance(p, f.accuracy)) { reset(); track('crowd_report', { place: id, kind: 'pandal', d: 'too_far' }); return toast(t('qr.tooFar', { d: dist(d) }), 4000); }
+    let r;
+    try { r = await community.reportCrowd(id, level, f); } catch { reset(); return toast(t('qr.failed')); }
+    track('crowd_report', { place: id, kind: 'pandal', d: r.status === 'ok' ? level : r.status });
+    if (r.status === 'unavailable') { box.hidden = true; return toast(t('qr.notYet')); }
+    if (r.status === 'ok' || r.status === 'too_soon') {
+      ask.innerHTML = queueThanksHtml(r.status === 'ok' ? t('qr.thanks', { level: queueWord(level) }) : t('qr.tooSoon'));
+      say.innerHTML = queueSayHtml(r) || `<p class="fine">${t('qr.few')}</p>`;
+      return;
+    }
+    reset();
+    toast(r.status === 'too_far' ? t('qr.tooFar', { d: dist(r.distance_m || d) }) : r.status === 'rate_limited' ? t('qr.rate') : t('qr.failed'), 4000);
+  };
+}
+
 /** Name with a compact "I'm here" / "I ate here" beside it. */
 const titleRow = (id, name, sub = '') => `<div class="title-row"><div class="tr-name"><h2 class="title">${esc(name)}</h2>${sub}</div>${visitButton(id)}</div>
   <div id="verifyBox" class="verify"></div>`;
@@ -174,7 +227,7 @@ const ctaBar = (id, p) => `<div class="sheet-cta">
 /* ---------------- photos (Wikimedia Commons, curated) ---------------- */
 function galleryHtml(photos) {
   if (!photos?.length) return '';
-  return `<div class="gallery" role="list">${photos.map((ph, i) => `<button class="gal" role="listitem" data-photo="${i}" aria-label="${esc(ph.title)}">
+  return `<div class="gallery">${photos.map((ph, i) => `<button type="button" class="gal" data-photo="${i}">
     <img loading="lazy" decoding="async" referrerpolicy="no-referrer" src="${esc(ph.src)}" alt="${esc(ph.title)}">
     ${ph.year ? `<span class="yr">${ph.year}</span>` : ''}</button>`).join('')}</div>
     <p class="fine credit">${t('ph.credit')}</p>`;
@@ -203,7 +256,7 @@ function gettingThereHtml(p, parks = []) {
     <ul class="mini-list">
       <li><span>${icon('metro', 'sm')} <span class="line-${p.nearest_metro.line}">●</span> ${esc(p.nearest_metro.name)}</span><small>${t('p.walkMin', { n: p.nearest_metro.walk_min })}</small></li>
       ${bus}${auto}${stands}
-      ${parks.map((x) => `<li data-park="${x.id}" ${btn()}><span>${icon('car', 'sm')} ${esc(x.name)}</span><small>${km(x.distance_m)} km</small></li>`).join('')}
+      ${parks.map((x) => `<li data-park="${x.id}"><span>${icon('car', 'sm')} ${rowBtn(esc(x.name))}</span><small>${km(x.distance_m)} km</small></li>`).join('')}
     </ul>
     ${auto ? `<p class="fine" style="margin-top:6px">${t('tr.autoNote')}</p>` : ''}`;
 }
@@ -229,7 +282,7 @@ function hopNextHtml(p) {
   if (!near.length) return '';
   return `<h3 class="sh">${t('p.hopNext')}</h3><p class="fine" style="margin:-4px 0 8px">${t('p.hopNextSub')}</p>
     <ul class="mini-list">${near.map(({ place: q, distance }) => { const v = vibeOf(q);
-      return `<li data-hop="${q.id}" ${btn()}><span><b>${esc(nm(q))}</b><br><small>${q.theme_2026 ? '🎭 ' + esc(themeTitle(q.theme_2026)) : v ? t('vibe.' + v) : esc(zn(zoneOf(q.zone)))}</small></span>
+      return `<li data-hop="${q.id}"><span><b>${rowBtn(esc(nm(q)))}</b><br><small>${q.theme_2026 ? '🎭 ' + esc(themeTitle(q.theme_2026)) : v ? t('vibe.' + v) : esc(zn(zoneOf(q.zone)))}</small></span>
         <small>${t('p.walkMin', { n: Math.max(1, Math.round((distance * M().detour) / speed)) })}</small></li>`; }).join('')}</ul>`;
 }
 
@@ -335,6 +388,7 @@ export function pandalSheet(id) {
     ${titleRow(id, nm(p), `<div class="fine">${S.prefs.lang === 'bn' ? esc(p.name) : esc(p.name_bn || '')}</div>`)}
     ${addrHtml(p)}
     <div class="btn-row" style="margin-top:8px">${crowdPill(now)}<span class="pill">${icon('star', 'sm fill')} ${p.popularity}/5</span>${vibePill(p)}${awardPill(p)}${p.geo_source === 'osm-approx' ? `<span class="pill">${icon('pin', 'sm')} ${t('p.approx')}</span>` : ''}</div>
+    ${queueBoxHtml(id)}
     ${themeHtml(p.theme_2026)}
     ${galleryHtml(p.photos)}
     ${dayToggleHtml()}
@@ -348,7 +402,7 @@ export function pandalSheet(id) {
     ${z.car_advisory !== 'ok' ? `<p class="fine" style="margin-top:6px">${esc(z.walk_tip)}</p>` : ''}
 
     <h3 class="sh">${t('p.eat')}</h3>
-    <ul class="mini-list">${foods.map((f) => `<li data-food="${f.id}" ${btn()}><span><b>${esc(f.name)}</b>${sponsoredTag(f.id)}<br><small>${esc(f.dishes.slice(0, 2).join(' · '))}</small></span><small>${t('p.walkMin', { n: f.walk_min })}</small></li>`).join('') || `<li>${t('p.noeat')}</li>`}</ul>
+    <ul class="mini-list">${foods.map((f) => `<li data-food="${f.id}"><span><b>${rowBtn(esc(f.name))}</b>${sponsoredTag(f.id)}<br><small>${esc(f.dishes.slice(0, 2).join(' · '))}</small></span><small>${t('p.walkMin', { n: f.walk_min })}</small></li>`).join('') || `<li>${t('p.noeat')}</li>`}</ul>
     ${helpHtml(p)}
 
     <details class="crowd-more"><summary>${icon('clock', 'sm')} ${t('p.crowdMore', { day: dn(idx.day[S.day]) })}</summary>
@@ -360,7 +414,7 @@ export function pandalSheet(id) {
     <p class="fine" style="margin-top:16px">${t('p.disclaimer')}</p>
     ${ctaBar(id, p)}`,
   (el) => {
-    wireVisit(el, id, () => pandalSheet(id)); wireDayToggle(el, () => pandalSheet(id));
+    wireVisit(el, id, () => pandalSheet(id)); wireDayToggle(el, () => pandalSheet(id)); wireQueue(el, id);
     wireGallery(el, p.photos || [], () => pandalSheet(id)); wireShareCta(el, id);
     el.querySelectorAll('[data-food]').forEach((li) => (li.onclick = () => foodSheet(li.dataset.food)));
     el.querySelectorAll('[data-park]').forEach((li) => (li.onclick = () => parkSheet(li.dataset.park)));
@@ -390,7 +444,7 @@ export function foodSheet(id) {
     ${dishesHtml(f)}
     ${community.enabled ? `<h3 class="sh sh-row">${t('mn.title')}<button class="link-btn" id="addMenuBtn">${icon('camera', 'sm')} ${t('mn.add')}</button></h3><div data-menu><p class="fine">${t('m.loading')}</p></div>` : ''}
     <h3 class="sh">${t('food.walkable')}</h3>
-    <ul class="mini-list">${f.near_pandals.map((pid) => `<li data-p="${pid}" ${btn()}><b>${esc(nm(idx.pandal[pid]))}</b><small>${dist(hav(ll(f), ll(idx.pandal[pid])))}</small></li>`).join('') || `<li>${t('food.noneNear')}</li>`}</ul>
+    <ul class="mini-list">${f.near_pandals.map((pid) => `<li data-p="${pid}"><b>${rowBtn(esc(nm(idx.pandal[pid])))}</b><small>${dist(hav(ll(f), ll(idx.pandal[pid])))}</small></li>`).join('') || `<li>${t('food.noneNear')}</li>`}</ul>
     ${gettingThereHtml(f)}
     ${community.enabled ? `<h3 class="sh" style="display:flex;justify-content:space-between;align-items:center">${t('m.here')}<button class="link-btn" id="addMomentBtn">${icon('camera', 'sm')} ${t('m.add')}</button></h3><div data-moments><p class="fine">${t('m.loading')}</p></div>` : ''}
     ${community.enabled ? `<div class="owner-cta"><span>🏪 ${t('of.ownQ')}</span><button class="btn sm" id="postOfferBtn">🏷️ ${t('of.post')}</button></div>` : ''}
@@ -443,7 +497,7 @@ export function parkSheet(id) {
     <div class="park-facts"><span class="park-cost big"><b>${esc(p.rate_hint)}</b><small>${t('park.costLbl')}</small></span><span class="pill">${t('cap.' + p.capacity)}</span></div>
     <div class="btn-row" style="margin-top:12px"><a class="btn primary" target="_blank" rel="noopener" href="${dirUrl(ll(p), 'driving')}">${icon('car')} ${t('park.drive')}</a></div>
     <h3 class="sh">${t('park.walkTo')}</h3>
-    <ul class="mini-list">${pandals.map(({ place: x, distance: d }) => `<li data-p="${x.id}" ${btn()}><b>${esc(nm(x))}</b><small>${dist(d * M().detour)}</small></li>`).join('') || `<li>${t('park.onward')}</li>`}</ul>`,
+    <ul class="mini-list">${pandals.map(({ place: x, distance: d }) => `<li data-p="${x.id}"><b>${rowBtn(esc(nm(x)))}</b><small>${dist(d * M().detour)}</small></li>`).join('') || `<li>${t('park.onward')}</li>`}</ul>`,
   (el) => el.querySelectorAll('[data-p]').forEach((li) => (li.onclick = () => pandalSheet(li.dataset.p))));
 }
 

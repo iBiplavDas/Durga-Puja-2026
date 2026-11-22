@@ -2,7 +2,7 @@
 
 A free, mobile-first guide to **Durga Puja 2026 pandal hopping in Kolkata and Howrah** (Shashthi 17 Oct → Dashami 21 Oct).
 
-**Live:** https://pujoparikramaguide.in (mirror: https://shubhgptgrowth.github.io/Durga-Puja-2026/) · daily marketing kit: [/kit/](https://pujoparikramaguide.in/kit/)
+**Live:** https://pujoparikramaguide.in (GitHub Pages address https://ibiplavdas.github.io/Durga-Puja-2026/ redirects here) · daily marketing kit: [/kit/](https://pujoparikramaguide.in/kit/)
 
 It works in English, বাংলা and हिन्दी, installs as an app, and keeps working on weak networks.
 

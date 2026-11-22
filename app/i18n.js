@@ -1,8 +1,6 @@
-/* UI strings in English, Bengali and Hindi (Hindi lives in i18n_hi.js). Data text (highlights, notes) stays in the language
+/* UI strings in English, Bengali and Hindi (Hindi lives in i18n_hi.js and loads only when chosen: loadLang). Data text (highlights, notes) stays in the language
  * it was written in. Pandal and zone names use the name_bn column.
  * tests/js checks that every key used in the code exists here, in both languages, with matching {placeholders}. */
-
-import { HI } from './i18n_hi.js';
 
 export const STR = {
   en: {
@@ -20,7 +18,7 @@ export const STR = {
     'tl.metro': '🚇 {line} Line: {from} → {to}', 'tl.bus': '🚌 Bus {routes}: board at {from}, get off at {to}',
     'tl.autoOsm': '🛺 Shared auto {routes} from {from}', 'tl.auto': '🛺 Shared auto {route}', 'tl.cab': '🚕 Cab or toto to {name}',
     'tab.home': 'Home', 'tab.explore': 'Explore', 'tab.plan': 'Routes', 'tab.moments': 'Moments', 'tab.me': 'My Pujo',
-    'lang.toggle': 'বাংলা', 'lang.aria': 'Language', 'sheet.close': 'Close',
+    'lang.toggle': 'বাংলা', 'lang.aria': 'Language', 'sheet.close': 'Close', 'sheet.label': 'Details', 'tab.aria': 'Sections',
     'count.today': 'Today is {day}. Shubho Pujo! 🙏', 'count.after': 'Asche bochor abar hobe! See you in 2027',
     'count.days': '{n} days to Shashthi (17 Oct)', 'count.day': '1 day to Shashthi (17 Oct)',
     'load.fail': "Couldn't load the guide data. Check your connection and reload.",
@@ -457,6 +455,21 @@ export const STR = {
     'v.doneShort': 'Checked in',
     'v.ateShort': 'Logged',
     'v.locatingShort': 'Checking…',
+    'qr.q': "How's the queue here?",
+    'qr.sub': 'At this pandal now? Tap one. It helps the people coming after you.',
+    'qr.lv.short': 'Short',
+    'qr.lv.medium': 'Medium',
+    'qr.lv.long': 'Long',
+    'qr.thanks': 'Thank you! You said the queue is {level}.',
+    'qr.peopleSay': 'People here say: mostly {level} ({n} people in the last 45 min)',
+    'qr.mixed': 'People here say: mixed ({counts}, in the last 45 min)',
+    'qr.note': 'From people at the pandal in the last 45 minutes. The crowd tag above is our estimate.',
+    'qr.few': 'Too few people have told us yet, so we are not showing anything.',
+    'qr.tooFar': "You're {d} away. You can tell us about the queue when you're at the pandal.",
+    'qr.tooSoon': 'You told us a few minutes ago. Thank you! You can tell us again after 20 minutes.',
+    'qr.rate': "That's a lot of reports today. Thank you for helping!",
+    'qr.failed': "Couldn't send it. Please try again.",
+    'qr.notYet': 'Queue reports are not available yet.',
     'g.shareWa': 'Share on WhatsApp',
     'gs.title': 'Keep your pujo on every phone',
     'gs.why': 'Sign in once. Your steps, pandals, food stops and badges come back automatically on any phone or browser.',
@@ -493,7 +506,7 @@ export const STR = {
     'tl.metro': '🚇 {line} লাইন: {from} → {to}', 'tl.bus': '🚌 বাস {routes}: {from} থেকে উঠুন, {to}-তে নামুন',
     'tl.autoOsm': '🛺 শেয়ার অটো {routes}, {from} থেকে', 'tl.auto': '🛺 শেয়ার অটো {route}', 'tl.cab': '🚕 ক্যাব বা টোটোয় {name}',
     'tab.home': 'হোম', 'tab.explore': 'ঘুরে দেখুন', 'tab.plan': 'রুট', 'tab.moments': 'মুহূর্ত', 'tab.me': 'আমার পুজো',
-    'lang.toggle': 'EN', 'lang.aria': 'ভাষা', 'sheet.close': 'বন্ধ করুন',
+    'lang.toggle': 'EN', 'lang.aria': 'ভাষা', 'sheet.close': 'বন্ধ করুন', 'sheet.label': 'বিস্তারিত', 'tab.aria': 'বিভাগ',
     'count.today': 'আজ {day}। শুভ পুজো! 🙏', 'count.after': 'আসছে বছর আবার হবে!',
     'count.days': 'ষষ্ঠী আসতে আর {n} দিন (১৭ অক্টোবর)', 'count.day': 'কাল ষষ্ঠী! (১৭ অক্টোবর)',
     'load.fail': 'গাইডের তথ্য লোড হল না। ইন্টারনেট দেখে আবার চেষ্টা করুন।',
@@ -922,6 +935,21 @@ export const STR = {
     'v.doneShort': 'চেক-ইন হয়েছে',
     'v.ateShort': 'লেখা হয়েছে',
     'v.locatingShort': 'দেখছি…',
+    'qr.q': 'এখানে লাইন কেমন?',
+    'qr.sub': 'এখন এই প্যান্ডেলে আছেন? একটা বোতাম টিপুন। পরে যাঁরা আসবেন, তাঁদের কাজে লাগবে।',
+    'qr.lv.short': 'ছোট',
+    'qr.lv.medium': 'মাঝারি',
+    'qr.lv.long': 'লম্বা',
+    'qr.thanks': 'ধন্যবাদ! আপনি জানালেন লাইন {level}।',
+    'qr.peopleSay': 'এখানকার লোকেরা বলছেন: বেশিরভাগের মতে লাইন {level} (গত ৪৫ মিনিটে {n} জন)',
+    'qr.mixed': 'এখানকার লোকেরা বলছেন: নানা মত ({counts}, গত ৪৫ মিনিটে)',
+    'qr.note': 'গত ৪৫ মিনিটে প্যান্ডেলে থাকা লোকেদের কথা। ওপরের ভিড়ের হিসেবটা আমাদের আন্দাজ।',
+    'qr.few': 'এখনও খুব কম লোক জানিয়েছেন, তাই কিছু দেখানো হচ্ছে না।',
+    'qr.tooFar': 'আপনি {d} দূরে। প্যান্ডেলে পৌঁছে লাইনের খবর দিন।',
+    'qr.tooSoon': 'কয়েক মিনিট আগেই জানিয়েছেন। ধন্যবাদ! ২০ মিনিট পরে আবার জানাতে পারবেন।',
+    'qr.rate': 'আজ অনেকবার জানিয়েছেন। সাহায্যের জন্য ধন্যবাদ!',
+    'qr.failed': 'পাঠানো গেল না। আবার চেষ্টা করুন।',
+    'qr.notYet': 'লাইনের খবর দেওয়ার ব্যবস্থা এখনও চালু হয়নি।',
     'g.shareWa': 'হোয়াটসঅ্যাপে শেয়ার',
     'gs.title': 'তোমার পুজো সব ফোনে থাকুক',
     'gs.why': 'একবার সাইন ইন করো। স্টেপ, প্যান্ডেল, খাওয়াদাওয়া আর ব্যাজ যে কোনো ফোন বা ব্রাউজারে নিজে থেকেই ফিরে আসবে।',
@@ -947,7 +975,14 @@ export const STR = {
     'kn.wishes': 'বিজয়ার শুভেচ্ছা',
   },
 };
-STR.hi = HI;
+
+/** Load a language's strings before switching to it. English and Bengali are built in; Hindi (about 70 KB) is fetched
+ * the first time someone picks it, so English and Bengali readers don't download it. Offline it comes from sw.js. */
+export async function loadLang(lang) {
+  if (lang === 'hi' && !STR.hi) {
+    try { STR.hi = (await import('./i18n_hi.js')).HI; } catch { /* offline and not cached: t() falls back to English */ }
+  }
+}
 
 export function makeT(getLang) {
   return (key, vars = {}) => {
