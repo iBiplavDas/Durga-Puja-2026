@@ -1,7 +1,7 @@
 /* My route: a 3-step wizard (areas → start point → route), with ready-made trails as a shortcut on step 1. */
 import { hav, orderRoute, hhmm, encodePlan, rideOption, routeUrls } from '../core.js';
 import {
-  S, G, idx, t, store, ll, M, nm, zs, dn, zoneOf, esc, km, fmt, crowdIndex, crowdWord, dayFactor, stepsFor, kcalFor, btn, icon, loc, todayKey, greetDay,
+  S, G, idx, t, store, ll, M, nm, zs, dn, zoneOf, esc, km, fmt, crowdIndex, crowdWord, dayFactor, stepsFor, kcalFor, btn, rowBtn, icon, loc, todayKey, greetDay,
 } from '../state.js';
 import { $, go, registerView, toast, getFix } from '../ui.js';
 import { openPlace, pandalDirUrl } from '../sheets.js';
@@ -396,7 +396,7 @@ function resultHtml(plan) {
       const f = p.food.filter((ff) => ff.distance_m <= 800).map((ff) => idx.food[ff.id]).find((ff) => !used.has(ff.id));
       if (f && (n - lastFood >= 3 || (meal && n - lastFood >= 2))) { used.add(f.id); lastFood = n; eat = `<div class="eat">${t('tl.eat', { dish: esc(f.dishes[0]), place: esc(f.name) })}</div>`; }
       prev = ll(p);
-      tl.push(`<li data-n="${n}" data-place="${st.pandal}" ${btn()}><div class="t">${st.arrive}</div><div class="nm">${esc(nm(p))}${visitedToday(st.pandal) ? ' ✓' : ''}</div>
+      tl.push(`<li data-n="${n}" data-place="${st.pandal}"><div class="t">${st.arrive}</div><div class="nm">${rowBtn(esc(nm(p)))}${visitedToday(st.pandal) ? ' ✓' : ''}</div>
         <div class="sub">${st.walk_m && !hop ? `${t('tl.walk', { m: st.walk_m })} · ` : ''}${crowdWord(st.crowd)} · ${t('tl.inside', { n: st.dwell_min })}</div>${eat}
         <a class="go" target="_blank" rel="noopener" href="${pandalDirUrl(p, hop ? 'transit' : 'walking')}" aria-label="${t('p.directions')}: ${esc(nm(p))}">${icon('pin', 'sm')}</a></li>`);
     }

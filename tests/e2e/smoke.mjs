@@ -33,7 +33,8 @@ for (let i = 0; i < 50; i++) { try { await fetch(base); break; } catch { await n
 
 const at = (id) => ({ latitude: P[id].lat, longitude: P[id].lng, accuracy: 10 });
 const browser = await chromium.launch({ executablePath: process.env.CHROME_PATH || undefined });
-const ctx = await browser.newContext({ ...devices['iPhone 13'], geolocation: at('tridhara'), permissions: ['geolocation'] });
+// Newer Chromium has DeviceMotionEvent.requestPermission (as iOS does); it answers "granted" only with the motion sensors allowed.
+const ctx = await browser.newContext({ ...devices['iPhone 13'], geolocation: at('tridhara'), permissions: ['geolocation', 'accelerometer', 'gyroscope'] });
 // The paid featured option ships switched off (priceInr 0); switch it on here so its flow stays tested.
 await ctx.addInitScript((cfg) => { window.PP_CONFIG = { community: cfg, featured: { priceInr: 1999 } }; }, { url: backend.url, anonKey: backend.anonKey });
 const page = await ctx.newPage();
@@ -201,6 +202,17 @@ try {
   must(await page.locator('#map, #modeBtn, .leaflet-container').count() === 0, 'Explore should have no map');
   await page.selectOption('#areaSelect', 'a:north');
   must(await count('#explorePanel .item') === G.zones.find((z) => z.id === 'north').pandal_ids.length, 'area filter count');
+  // Keyboard: the place name is a real button; the page that opens is a named dialog, Tab stays inside it, and Escape
+  // closes it and puts focus back on the button.
+  await page.focus('#explorePanel .item[data-place="bagbazar"] .row-btn');
+  await page.keyboard.press('Enter');
+  await page.waitForSelector('.sheet.open');
+  must(await page.evaluate(() => !!document.querySelector('#sheet').getAttribute('aria-labelledby')), 'the page (dialog) has no name');
+  for (let i = 0; i < 6; i++) await page.keyboard.press('Tab');
+  must(await page.evaluate(() => document.querySelector('#sheet').contains(document.activeElement)), 'Tab left the open page');
+  await page.keyboard.press('Escape');
+  await page.waitForFunction(() => document.activeElement?.closest('[data-place="bagbazar"]'), null, { timeout: 3000 })
+    .catch(() => { throw new Error('focus did not return to the pandal after closing its page'); });
   await page.click('#explorePanel .item[data-place="bagbazar"]');
   // Puja-day chips on the page: footfall follows the chosen day (today's pujo day, or Saptami before the pujo)
   await page.waitForSelector('.sheet.open .day-toggle [data-sday][aria-checked="true"]');
@@ -752,7 +764,10 @@ try {
   await page.click('.tab[data-view="home"]');
   await shot('12-home-bn');
   await page.selectOption('#langSelect', 'hi');
-  must((await page.locator('#tab-home span').innerText()) === 'होम', 'tabs not translated to Hindi');
+  // Hindi strings load on demand (i18n.js loadLang), so give them a moment.
+  must(await page.waitForFunction(() => document.querySelector('#tab-home span').textContent === 'होम', null, { timeout: 5000 }).then(() => true, () => false),
+    'tabs not translated to Hindi');
+  must(await page.evaluate(() => document.documentElement.lang) === 'hi', '<html lang> not switched to Hindi');
   await shot('12b-home-hi');
   await page.selectOption('#langSelect', 'en');
   await page.emulateMedia({ colorScheme: 'dark' });

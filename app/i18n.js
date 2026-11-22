@@ -1,8 +1,6 @@
-/* UI strings in English, Bengali and Hindi (Hindi lives in i18n_hi.js). Data text (highlights, notes) stays in the language
+/* UI strings in English, Bengali and Hindi (Hindi lives in i18n_hi.js and loads only when chosen: loadLang). Data text (highlights, notes) stays in the language
  * it was written in. Pandal and zone names use the name_bn column.
  * tests/js checks that every key used in the code exists here, in both languages, with matching {placeholders}. */
-
-import { HI } from './i18n_hi.js';
 
 export const STR = {
   en: {
@@ -20,7 +18,7 @@ export const STR = {
     'tl.metro': '🚇 {line} Line: {from} → {to}', 'tl.bus': '🚌 Bus {routes}: board at {from}, get off at {to}',
     'tl.autoOsm': '🛺 Shared auto {routes} from {from}', 'tl.auto': '🛺 Shared auto {route}', 'tl.cab': '🚕 Cab or toto to {name}',
     'tab.home': 'Home', 'tab.explore': 'Explore', 'tab.plan': 'Routes', 'tab.moments': 'Moments', 'tab.me': 'My Pujo',
-    'lang.toggle': 'বাংলা', 'lang.aria': 'Language', 'sheet.close': 'Close',
+    'lang.toggle': 'বাংলা', 'lang.aria': 'Language', 'sheet.close': 'Close', 'sheet.label': 'Details', 'tab.aria': 'Sections',
     'count.today': 'Today is {day}. Shubho Pujo! 🙏', 'count.after': 'Asche bochor abar hobe! See you in 2027',
     'count.days': '{n} days to Shashthi (17 Oct)', 'count.day': '1 day to Shashthi (17 Oct)',
     'load.fail': "Couldn't load the guide data. Check your connection and reload.",
@@ -508,7 +506,7 @@ export const STR = {
     'tl.metro': '🚇 {line} লাইন: {from} → {to}', 'tl.bus': '🚌 বাস {routes}: {from} থেকে উঠুন, {to}-তে নামুন',
     'tl.autoOsm': '🛺 শেয়ার অটো {routes}, {from} থেকে', 'tl.auto': '🛺 শেয়ার অটো {route}', 'tl.cab': '🚕 ক্যাব বা টোটোয় {name}',
     'tab.home': 'হোম', 'tab.explore': 'ঘুরে দেখুন', 'tab.plan': 'রুট', 'tab.moments': 'মুহূর্ত', 'tab.me': 'আমার পুজো',
-    'lang.toggle': 'EN', 'lang.aria': 'ভাষা', 'sheet.close': 'বন্ধ করুন',
+    'lang.toggle': 'EN', 'lang.aria': 'ভাষা', 'sheet.close': 'বন্ধ করুন', 'sheet.label': 'বিস্তারিত', 'tab.aria': 'বিভাগ',
     'count.today': 'আজ {day}। শুভ পুজো! 🙏', 'count.after': 'আসছে বছর আবার হবে!',
     'count.days': 'ষষ্ঠী আসতে আর {n} দিন (১৭ অক্টোবর)', 'count.day': 'কাল ষষ্ঠী! (১৭ অক্টোবর)',
     'load.fail': 'গাইডের তথ্য লোড হল না। ইন্টারনেট দেখে আবার চেষ্টা করুন।',
@@ -977,7 +975,14 @@ export const STR = {
     'kn.wishes': 'বিজয়ার শুভেচ্ছা',
   },
 };
-STR.hi = HI;
+
+/** Load a language's strings before switching to it. English and Bengali are built in; Hindi (about 70 KB) is fetched
+ * the first time someone picks it, so English and Bengali readers don't download it. Offline it comes from sw.js. */
+export async function loadLang(lang) {
+  if (lang === 'hi' && !STR.hi) {
+    try { STR.hi = (await import('./i18n_hi.js')).HI; } catch { /* offline and not cached: t() falls back to English */ }
+  }
+}
 
 export function makeT(getLang) {
   return (key, vars = {}) => {

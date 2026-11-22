@@ -15,7 +15,7 @@ export const HI = {
   'tl.metro': '🚇 {line} लाइन: {from} → {to}', 'tl.bus': '🚌 बस {routes}: {from} से चढ़ें, {to} पर उतरें',
   'tl.autoOsm': '🛺 शेयर ऑटो {routes}, {from} से', 'tl.auto': '🛺 शेयर ऑटो {route}', 'tl.cab': '🚕 {name} तक कैब या टोटो',
   'tab.home': 'होम', 'tab.explore': 'खोजें', 'tab.plan': 'रूट', 'tab.moments': 'पल', 'tab.me': 'मेरी पूजा',
-  'lang.toggle': 'EN', 'lang.aria': 'भाषा', 'sheet.close': 'बंद करें',
+  'lang.toggle': 'EN', 'lang.aria': 'भाषा', 'sheet.close': 'बंद करें', 'sheet.label': 'विवरण', 'tab.aria': 'विभाग',
   'count.today': 'आज {day} है। शुभो पूजो! 🙏', 'count.after': 'आश्चे बोछोर आबार होबे! 2027 में फिर मिलेंगे',
   'count.days': 'षष्ठी में {n} दिन बाकी (17 अक्टूबर)', 'count.day': 'षष्ठी में 1 दिन बाकी (17 अक्टूबर)',
   'load.fail': 'गाइड का डेटा लोड नहीं हो पाया। इंटरनेट देखकर दोबारा लोड करें।',

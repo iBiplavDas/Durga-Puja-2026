@@ -24,9 +24,25 @@
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <link rel="preload" href="fonts/inter-latin-wght.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="preload" href="fonts/fraunces-latin-wght.woff2" as="font" type="font/woff2" crossorigin>
+  <!-- Start the guide download now, in parallel with the scripts, instead of after every module has loaded (app.js picks it up). -->
+  <script>window.ppGuide = fetch('data/guide.json', { cache: 'no-cache' }).then((r) => (r.ok ? r.json() : null)).catch(() => null);</script>
+  <!-- Fonts are not preloaded on purpose: on a slow network they took bandwidth from the scripts and the guide, so
+       Home showed later. They use font-display: swap, and sw.js keeps them for the next visit. -->
   <link rel="stylesheet" href="styles.css">
+  <!-- Every module app.js imports, so the browser fetches them at once rather than one import level at a time.
+       tests/js checks this list against the real import graph. -->
+  <link rel="modulepreload" href="app.js"><link rel="modulepreload" href="state.js"><link rel="modulepreload" href="i18n.js">
+  <link rel="modulepreload" href="core.js"><link rel="modulepreload" href="config.js"><link rel="modulepreload" href="community.js">
+  <link rel="modulepreload" href="ui.js"><link rel="modulepreload" href="actions.js"><link rel="modulepreload" href="views/home.js">
+  <link rel="modulepreload" href="views/explore.js"><link rel="modulepreload" href="views/plan.js"><link rel="modulepreload" href="views/moments.js">
+  <link rel="modulepreload" href="views/me.js"><link rel="modulepreload" href="growth.js"><link rel="modulepreload" href="sheets.js">
+  <link rel="modulepreload" href="radioCard.js"><link rel="modulepreload" href="analytics.js"><link rel="modulepreload" href="livecount.js">
+  <link rel="modulepreload" href="celebrate.js"><link rel="modulepreload" href="sync.js"><link rel="modulepreload" href="offers.js">
+  <link rel="modulepreload" href="suggest.js"><link rel="modulepreload" href="filters.js"><link rel="modulepreload" href="photos.js">
+  <link rel="modulepreload" href="reels.js"><link rel="modulepreload" href="car.js"><link rel="modulepreload" href="foodinfo.js">
+  <link rel="modulepreload" href="pickers.js"><link rel="modulepreload" href="badges.js"><link rel="modulepreload" href="credits.js">
+  <link rel="modulepreload" href="media.js"><link rel="modulepreload" href="footfall.js"><link rel="modulepreload" href="radio.js">
+  <link rel="modulepreload" href="sfx.js">
 </head>
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -71,7 +87,7 @@
 
   <header class="topbar">
     <div class="brand">
-      <button type="button" class="dhak-btn" id="dhakBtn" aria-label="Play the dhak"><img src="img/tiles/dhak.jpg" alt="" width="46" height="46" onerror="this.src='icons/icon.svg'"><i class="dhak-ring" aria-hidden="true"></i><span class="dhak-state" aria-hidden="true">▶</span></button>
+      <button type="button" class="dhak-btn" id="dhakBtn" aria-label="Play the dhak"><img src="img/tiles/dhak-icon.jpg" alt="" width="42" height="42" onerror="this.src='icons/icon.svg'"><i class="dhak-ring" aria-hidden="true"></i><span class="dhak-state" aria-hidden="true">▶</span></button>
       <div class="brand-text">
         <h1 class="sr-only">Pujo Parikrama</h1>
         <div id="greet" class="greet" lang="bn" aria-hidden="true">শুভ শারদীয়া</div>
@@ -79,7 +95,7 @@
       </div>
     </div>
     <button type="button" class="live-pill" id="livePill" hidden><span class="live-dot" aria-hidden="true"></span><span class="lp-tx"><b id="livePillN"></b><span id="livePillL"></span></span></button>
-    <button type="button" class="sos-btn" id="sosBtn" aria-label="Emergency help">SOS</button>
+    <button type="button" class="sos-btn" id="sosBtn" aria-label="Emergency numbers and SOS">SOS</button>
     <label class="lang-pick">
       <span class="sr-only">Language</span>
       <select id="langSelect" aria-label="Language"><option value="en">EN</option><option value="bn">বাং</option><option value="hi">हिं</option></select>
@@ -109,7 +125,7 @@
   </nav>
 
   <div class="sheet-backdrop" id="sheetBackdrop" hidden></div>
-  <section class="sheet" id="sheet" role="dialog" aria-modal="true" aria-hidden="true" tabindex="-1">
+  <section class="sheet" id="sheet" role="dialog" aria-modal="true" aria-hidden="true" tabindex="-1" inert>
     <div class="sheet-grip" aria-hidden="true"></div>
     <button class="sheet-close" id="sheetClose" aria-label="Close">×</button>
     <div id="sheetBody"></div>

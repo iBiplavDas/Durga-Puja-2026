@@ -2,7 +2,7 @@
 import { hav, fmtCount, isOpen, hoursOf, nearest, timeAgo, vibeOf, crowdSummary, QUEUE_LEVELS } from './core.js';
 import {
   S, G, idx, t, store, community, ll, M, nm, zn, dn, zoneOf, placeOf, placeKind, esc, km, dist, ampm,
-  crowdIndex, crowdWord, crowdColor, crowdLevel, dayFactor, btn, icon, savePrefs,
+  crowdIndex, crowdWord, crowdColor, crowdLevel, dayFactor, rowBtn, icon, savePrefs,
 } from './state.js';
 import { openSheet, closeSheet, toast, go, getFix, rerender, $ } from './ui.js';
 import { visit, visitPrivately, visitMessage, visitedToday, celebrateVisit, allowedDistance } from './actions.js';
@@ -227,7 +227,7 @@ const ctaBar = (id, p) => `<div class="sheet-cta">
 /* ---------------- photos (Wikimedia Commons, curated) ---------------- */
 function galleryHtml(photos) {
   if (!photos?.length) return '';
-  return `<div class="gallery" role="list">${photos.map((ph, i) => `<button class="gal" role="listitem" data-photo="${i}" aria-label="${esc(ph.title)}">
+  return `<div class="gallery">${photos.map((ph, i) => `<button type="button" class="gal" data-photo="${i}">
     <img loading="lazy" decoding="async" referrerpolicy="no-referrer" src="${esc(ph.src)}" alt="${esc(ph.title)}">
     ${ph.year ? `<span class="yr">${ph.year}</span>` : ''}</button>`).join('')}</div>
     <p class="fine credit">${t('ph.credit')}</p>`;
@@ -256,7 +256,7 @@ function gettingThereHtml(p, parks = []) {
     <ul class="mini-list">
       <li><span>${icon('metro', 'sm')} <span class="line-${p.nearest_metro.line}">●</span> ${esc(p.nearest_metro.name)}</span><small>${t('p.walkMin', { n: p.nearest_metro.walk_min })}</small></li>
       ${bus}${auto}${stands}
-      ${parks.map((x) => `<li data-park="${x.id}" ${btn()}><span>${icon('car', 'sm')} ${esc(x.name)}</span><small>${km(x.distance_m)} km</small></li>`).join('')}
+      ${parks.map((x) => `<li data-park="${x.id}"><span>${icon('car', 'sm')} ${rowBtn(esc(x.name))}</span><small>${km(x.distance_m)} km</small></li>`).join('')}
     </ul>
     ${auto ? `<p class="fine" style="margin-top:6px">${t('tr.autoNote')}</p>` : ''}`;
 }
@@ -282,7 +282,7 @@ function hopNextHtml(p) {
   if (!near.length) return '';
   return `<h3 class="sh">${t('p.hopNext')}</h3><p class="fine" style="margin:-4px 0 8px">${t('p.hopNextSub')}</p>
     <ul class="mini-list">${near.map(({ place: q, distance }) => { const v = vibeOf(q);
-      return `<li data-hop="${q.id}" ${btn()}><span><b>${esc(nm(q))}</b><br><small>${q.theme_2026 ? '🎭 ' + esc(themeTitle(q.theme_2026)) : v ? t('vibe.' + v) : esc(zn(zoneOf(q.zone)))}</small></span>
+      return `<li data-hop="${q.id}"><span><b>${rowBtn(esc(nm(q)))}</b><br><small>${q.theme_2026 ? '🎭 ' + esc(themeTitle(q.theme_2026)) : v ? t('vibe.' + v) : esc(zn(zoneOf(q.zone)))}</small></span>
         <small>${t('p.walkMin', { n: Math.max(1, Math.round((distance * M().detour) / speed)) })}</small></li>`; }).join('')}</ul>`;
 }
 
@@ -402,7 +402,7 @@ export function pandalSheet(id) {
     ${z.car_advisory !== 'ok' ? `<p class="fine" style="margin-top:6px">${esc(z.walk_tip)}</p>` : ''}
 
     <h3 class="sh">${t('p.eat')}</h3>
-    <ul class="mini-list">${foods.map((f) => `<li data-food="${f.id}" ${btn()}><span><b>${esc(f.name)}</b>${sponsoredTag(f.id)}<br><small>${esc(f.dishes.slice(0, 2).join(' · '))}</small></span><small>${t('p.walkMin', { n: f.walk_min })}</small></li>`).join('') || `<li>${t('p.noeat')}</li>`}</ul>
+    <ul class="mini-list">${foods.map((f) => `<li data-food="${f.id}"><span><b>${rowBtn(esc(f.name))}</b>${sponsoredTag(f.id)}<br><small>${esc(f.dishes.slice(0, 2).join(' · '))}</small></span><small>${t('p.walkMin', { n: f.walk_min })}</small></li>`).join('') || `<li>${t('p.noeat')}</li>`}</ul>
     ${helpHtml(p)}
 
     <details class="crowd-more"><summary>${icon('clock', 'sm')} ${t('p.crowdMore', { day: dn(idx.day[S.day]) })}</summary>
@@ -444,7 +444,7 @@ export function foodSheet(id) {
     ${dishesHtml(f)}
     ${community.enabled ? `<h3 class="sh sh-row">${t('mn.title')}<button class="link-btn" id="addMenuBtn">${icon('camera', 'sm')} ${t('mn.add')}</button></h3><div data-menu><p class="fine">${t('m.loading')}</p></div>` : ''}
     <h3 class="sh">${t('food.walkable')}</h3>
-    <ul class="mini-list">${f.near_pandals.map((pid) => `<li data-p="${pid}" ${btn()}><b>${esc(nm(idx.pandal[pid]))}</b><small>${dist(hav(ll(f), ll(idx.pandal[pid])))}</small></li>`).join('') || `<li>${t('food.noneNear')}</li>`}</ul>
+    <ul class="mini-list">${f.near_pandals.map((pid) => `<li data-p="${pid}"><b>${rowBtn(esc(nm(idx.pandal[pid])))}</b><small>${dist(hav(ll(f), ll(idx.pandal[pid])))}</small></li>`).join('') || `<li>${t('food.noneNear')}</li>`}</ul>
     ${gettingThereHtml(f)}
     ${community.enabled ? `<h3 class="sh" style="display:flex;justify-content:space-between;align-items:center">${t('m.here')}<button class="link-btn" id="addMomentBtn">${icon('camera', 'sm')} ${t('m.add')}</button></h3><div data-moments><p class="fine">${t('m.loading')}</p></div>` : ''}
     ${community.enabled ? `<div class="owner-cta"><span>🏪 ${t('of.ownQ')}</span><button class="btn sm" id="postOfferBtn">🏷️ ${t('of.post')}</button></div>` : ''}
@@ -497,7 +497,7 @@ export function parkSheet(id) {
     <div class="park-facts"><span class="park-cost big"><b>${esc(p.rate_hint)}</b><small>${t('park.costLbl')}</small></span><span class="pill">${t('cap.' + p.capacity)}</span></div>
     <div class="btn-row" style="margin-top:12px"><a class="btn primary" target="_blank" rel="noopener" href="${dirUrl(ll(p), 'driving')}">${icon('car')} ${t('park.drive')}</a></div>
     <h3 class="sh">${t('park.walkTo')}</h3>
-    <ul class="mini-list">${pandals.map(({ place: x, distance: d }) => `<li data-p="${x.id}" ${btn()}><b>${esc(nm(x))}</b><small>${dist(d * M().detour)}</small></li>`).join('') || `<li>${t('park.onward')}</li>`}</ul>`,
+    <ul class="mini-list">${pandals.map(({ place: x, distance: d }) => `<li data-p="${x.id}"><b>${rowBtn(esc(nm(x)))}</b><small>${dist(d * M().detour)}</small></li>`).join('') || `<li>${t('park.onward')}</li>`}</ul>`,
   (el) => el.querySelectorAll('[data-p]').forEach((li) => (li.onclick = () => pandalSheet(li.dataset.p))));
 }
 

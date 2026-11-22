@@ -6,7 +6,9 @@ import {
   routeUrls, isOpen, hhmm, encodePlan, decodePlan, parseSteps, mergeProgress, embedUrl,
 } from '../../app/core.js';
 import { dietMatch, hasEgg, cost2 } from '../../app/foodinfo.js';
-import { STR } from '../../app/i18n.js';
+import { STR, loadLang } from '../../app/i18n.js';
+
+await loadLang('hi'); // Hindi loads on demand in the app
 
 const G = JSON.parse(readFileSync(new URL('../../app/data/guide.json', import.meta.url)));
 const ll = (r) => [r.lat, r.lng];
