@@ -93,6 +93,10 @@ jobs:
           }
           for f in supabase/migrations/*.sql; do run_sql "$f"; done
           run_sql supabase/seed.sql
+          # The project URL, so analytics.moments_queue can link each reported photo (docs/product/COMMUNITY.md)
+          echo "insert into private.project_settings (key, value) values ('supabase_url', 'https://${{ steps.ref.outputs.ref }}.supabase.co')
+            on conflict (key) do update set value = excluded.value;" > /tmp/settings.sql
+          run_sql /tmp/settings.sql
 
       - name: Fetch keys and verify
         run: |
