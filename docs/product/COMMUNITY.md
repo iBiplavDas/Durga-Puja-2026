@@ -17,8 +17,32 @@ It runs on [Supabase](https://supabase.com) (Postgres, Auth, Storage) and talks 
 | Direct table access | RLS is on for every table with **no** policies. Clients can only read the `place_stats` and `photos_feed` views and call the RPCs |
 | Location privacy | The coordinates are used once, for the distance check, and only the distance is stored. Photos are re-encoded on the phone, which strips EXIF data, GPS included |
 | Bad uploads | The storage bucket allows only JPEG/WebP/MP4/WebM/MOV up to 20 MB. Uploads must go into your own `<uid>/` folder. `add_photo()` rejects files you didn't upload, and caps you at 30 moments a day and 6 in 10 minutes |
-| Abuse | Three distinct reports hide a moment. Moderators can review or unhide them in the dashboard (`photos.hidden`, `photo_reports`) |
+| Abuse | Three distinct reports hide a moment. The team reviews them in `analytics.moments_queue` and hides, restores or deletes them with `moderate_moment()` (see Moderation) |
 | Bad networks | Check-ins queue on the phone with their real time and GPS fix, and are accepted up to 12 h late. Moments queue in IndexedDB and upload when the network returns |
+
+## Moderation
+
+Reported moments wait in Supabase → **Table editor → schema `analytics` → `moments_queue`**
+(`supabase/migrations/*_moderation.sql`): what needs a look comes first, most-reported and newest on top. Each row
+has the place, caption, `status` (*reported*, *hidden by reports*, *hidden by team*), the report count, the
+reasons (e.g. `spam ×2, not this pandal`), and `url` / `thumb_url` links to open the media. Neither the queue nor
+the action below can be reached with the app's key.
+
+Act from the **SQL editor**, with the row's `id`:
+
+```sql
+select public.moderate_moment('<id>', 'hide');     -- take it down, whatever the reports say
+select public.moderate_moment('<id>', 'restore');  -- false alarm: show it again and clear its reports
+select public.moderate_moment('<id>', 'delete');   -- remove it for good
+```
+
+* **Restore** stamps `reviewed_at`. The old reports no longer count, and the same people can't report it again,
+  so it only comes back to the queue on new reports (three new ones hide it again).
+* **Delete** removes the row, its likes and reports, and returns `path` and `thumb_path`: delete those two files
+  in **Storage → moments** too (SQL can't remove storage files), or they keep using space.
+* The "N moments" count on place pages stays right through every action (menu photos never count).
+* The links need the project URL, which **supabase-setup** stores. If `url` is empty, run it once, or insert
+  `('supabase_url', 'https://<ref>.supabase.co')` into `private.project_settings`.
 
 ## One-time setup (about 10 minutes)
 

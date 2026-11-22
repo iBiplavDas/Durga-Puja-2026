@@ -1,5 +1,6 @@
 /* Pujo Parikrama 2026: entry point. Loads the guide data, wires up the shell and the
  * community sync, then hands off to the views in ./views. */
+import './errors.js'; // first, so it is listening before anything else loads
 import { decodePlan, parseSteps } from './core.js';
 import { S, G, idx, t, store, community, loadGuide, dn, todayKey, greetDay, savePrefs, bnDigits, loc } from './state.js';
 import { dayRec, saveHistory } from './actions.js';

@@ -695,6 +695,21 @@ try {
   }
   await closeSheet();
 
+  // Error beacon: an uncaught error is sent once (deduped), with a clean source and no query string or user agent.
+  if (fake) {
+    await page.evaluate(() => {
+      const ev = () => new ErrorEvent('error', { message: 'smoke beacon check', filename: location.origin + '/app.js?v=9', lineno: 7, colno: 3 });
+      dispatchEvent(ev()); dispatchEvent(ev());
+      dispatchEvent(new ErrorEvent('error', { message: 'ResizeObserver loop limit exceeded' }));
+    });
+    await page.waitForTimeout(400);
+    const ce = (await (await fetch(`${fake.url}/__state`)).json()).clientErrors.filter((x) => x.message === 'smoke beacon check');
+    must(ce.length === 1 && ce[0].source === '/app.js' && ce[0].line === 7 && ce[0].view && ce[0].browser && !/Mozilla/.test(ce[0].browser), 'error beacon: ' + JSON.stringify(ce));
+    const all = (await (await fetch(`${fake.url}/__state`)).json()).clientErrors;
+    must(!all.some((x) => /ResizeObserver/.test(x.message)), 'error beacon should drop ResizeObserver noise');
+    must(all.length === 1, 'the app itself reported errors: ' + JSON.stringify(all));
+  }
+
   // Bengali, dark mode, offline reload
   await page.selectOption('#langSelect', 'bn');
   must((await page.locator('#tab-home span').innerText()) === 'হোম', 'tabs not translated');

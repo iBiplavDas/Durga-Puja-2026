@@ -12,7 +12,7 @@ const istDay = (d = new Date()) => new Date(d.getTime() + 5.5 * 3600e3).toISOStr
 export function startFakeSupabase({ guidePath, port = 0 }) {
   const g = JSON.parse(readFileSync(guidePath, 'utf8'));
   const places = new Map([...g.pandals.map((p) => [p.id, { ...p, kind: 'pandal' }]), ...g.food.map((f) => [f.id, { ...f, kind: 'food' }])]);
-  const db = { tokens: new Map(), visits: [], photos: [], likes: new Set(), reports: new Set(), files: new Map(), opens: new Map(), ratings: new Map(), profiles: new Map(), progress: new Map(), members: new Map(), offers: [], suggestions: [], events: [], presence: new Map(), offline: false, google: null };
+  const db = { tokens: new Map(), visits: [], photos: [], likes: new Set(), reports: new Set(), files: new Map(), opens: new Map(), ratings: new Map(), profiles: new Map(), progress: new Map(), members: new Map(), offers: [], suggestions: [], clientErrors: [], events: [], presence: new Map(), offline: false, google: null };
 
   const json = (res, code, body) => { res.writeHead(code, { 'Content-Type': 'application/json', ...cors }); res.end(JSON.stringify(body)); };
   const cors = { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Headers': 'apikey, authorization, content-type, x-upsert, cache-control, prefer', 'Access-Control-Allow-Methods': 'GET, POST, DELETE, OPTIONS' };
@@ -121,6 +121,13 @@ export function startFakeSupabase({ guidePath, port = 0 }) {
       db.offers.push(o);
       return { status: 'pending', id: o.id };
     },
+    // The error beacon (app/errors.js); granted to anon. Kept so the smoke test can check what was sent.
+    log_client_error(uid, a) {
+      if (!String(a.p_message || '').trim()) return { status: 'ignored' };
+      db.clientErrors.push({ message: String(a.p_message).slice(0, 300), source: a.p_source ?? null, line: a.p_line ?? null, col: a.p_col ?? null,
+        kind: a.p_kind === 'rejection' ? 'rejection' : 'error', version: a.p_version ?? null, browser: a.p_browser ?? null, view: a.p_view ?? null, page: a.p_page ?? null });
+      return { status: 'ok' };
+    },
     suggest_pujo(uid, a) {
       if (String(a.p_name || '').trim().length < 3) return { status: 'bad_name' };
       if (String(a.p_area || '').trim().length < 2) return { status: 'bad_area' };
@@ -174,7 +181,7 @@ export function startFakeSupabase({ guidePath, port = 0 }) {
     if (db.offline && !url.pathname.startsWith('/__')) { req.socket.destroy(); return; }
     const p = url.pathname;
     if (p === '/__crowd') { db.extraLive = +url.searchParams.get('live') || 0; db.extraPeople = +url.searchParams.get('people') || 0; return json(res, 200, {}); }
-    if (p === '/__state') return json(res, 200, { offers: db.offers, suggestions: db.suggestions, progress: Object.fromEntries(db.progress), events: db.events, ratings: db.ratings.size, profiles: [...db.profiles.values()], visits: db.visits.length, photos: db.photos.length, files: db.files.size, opens: [...db.opens.values()] });
+    if (p === '/__state') return json(res, 200, { offers: db.offers, suggestions: db.suggestions, clientErrors: db.clientErrors, progress: Object.fromEntries(db.progress), events: db.events, ratings: db.ratings.size, profiles: [...db.profiles.values()], visits: db.visits.length, photos: db.photos.length, files: db.files.size, opens: [...db.opens.values()] });
     // The Google consent screen, answered at once: link the guest, or sign in to the account it's linked to.
     if (p === '/__google') {
       const back = url.searchParams.get('redirect_to'), uid = url.searchParams.get('uid');
@@ -232,7 +239,7 @@ export function startFakeSupabase({ guidePath, port = 0 }) {
     }
     if (p.startsWith('/rest/v1/rpc/') && req.method === 'POST') {
       const name = p.slice('/rest/v1/rpc/'.length), uid = uidOf(req);
-      if (!uid && !['track_open', 'track', 'site_counts'].includes(name)) return json(res, 401, { message: 'JWT required' });  // granted to anon
+      if (!uid && !['track_open', 'track', 'site_counts', 'log_client_error'].includes(name)) return json(res, 401, { message: 'JWT required' });  // granted to anon
       const fn = rpc[name]; if (!fn) return json(res, 404, { message: 'no such function' });
       return json(res, 200, fn(uid, JSON.parse(await body(req) || '{}')));
     }
