@@ -287,6 +287,51 @@ export class Community {
     return this.rpc('submit_offer', args);
   }
 
+  /* ------------------------------------------------------------ "How's the queue here?" (pandals) */
+  /* Needs the *_crowd_reports.sql migration, which a separate workflow applies after the deploy. Until it is there,
+   * PostgREST answers 404 (PGRST202, unknown function): crowdMissing turns true for this session and the place page
+   * leaves the question out. */
+  _isMissing(e) { return e?.status === 404 || e?.code === 'PGRST202'; }
+
+  /** The last 45 minutes at a pandal: {reports, short, medium, long, window_min}, or null when unavailable. */
+  async crowdNow(placeId) {
+    if (!this.enabled || this.crowdMissing) return null;
+    const hit = this._crowd?.[placeId];
+    if (hit && Date.now() - hit.at < 60e3) return hit.agg;   // reopening a page (day chips) needn't ask again
+    const res = await fetch(`${this.url}/rest/v1/rpc/crowd_now`, { method: 'POST', headers: this._headers(false), body: JSON.stringify({ p_place: placeId }) });
+    if (!res.ok) {
+      const j = await res.json().catch(() => ({}));
+      if (this._isMissing({ status: res.status, code: j.code })) { this.crowdMissing = true; return null; }
+      throw Object.assign(new Error(`crowd_now ${res.status}`), { status: res.status });
+    }
+    const agg = await res.json();
+    (this._crowd ||= {})[placeId] = { at: Date.now(), agg };
+    return agg;
+  }
+
+  /** Report Short / Medium / Long from the pandal. Resolves to the server result (with the fresh aggregate when it
+   * went in), or {status:'unavailable'} before the migration is applied. Remembers the last report per pandal. */
+  async reportCrowd(placeId, level, fix) {
+    let r;
+    try {
+      r = await this.rpc('report_crowd', { p_place: placeId, p_level: level, p_lat: fix.lat, p_lng: fix.lng, p_accuracy: fix.accuracy ?? null });
+    } catch (e) {
+      if (this._isMissing(e)) { this.crowdMissing = true; return { status: 'unavailable' }; }
+      throw e;
+    }
+    if (r.reports != null) (this._crowd ||= {})[placeId] = { at: Date.now(), agg: r };
+    if (r.status === 'ok') {
+      const keep = Object.entries(lsGet('community.crowdMine', {})).filter(([, m]) => Date.now() - m.at < 864e5);
+      lsSet('community.crowdMine', { ...Object.fromEntries(keep), [placeId]: { level, at: Date.now() } });
+    }
+    return r;
+  }
+  /** This phone's report at a pandal in the last 20 minutes (the server takes one per pandal per 20 minutes). */
+  myCrowdReport(placeId, now = Date.now()) {
+    const m = lsGet('community.crowdMine', {})[placeId];
+    return m && now - m.at < 20 * 60e3 ? m : null;
+  }
+
   upload(path, blob, contentType, onProgress) {
     return new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest();

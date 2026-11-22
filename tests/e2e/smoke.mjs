@@ -175,6 +175,24 @@ try {
   await shot('03-checked-in');
   await closeSheet();
 
+  // "How's the queue here?" at Tridhara: three big buttons beside the crowd estimate. What people say shows only from
+  // 3 people (here: 2 others + this phone), and the estimate stays as it is.
+  if (fake) await fetch(`${fake.url}/__crowdSeed?place=tridhara&level=long&n=2`);
+  await page.fill('#homeSearch', 'tridh');
+  await page.click('#homeResults li[data-result="tridhara"]');
+  await page.waitForSelector('.sheet.open #queueBox:not([hidden]) [data-queue="long"]');
+  if (fake) must(await count('.sheet.open .queue-say') === 0, 'two reports must not be shown');
+  await page.click('.sheet.open [data-queue="long"]');
+  await page.waitForSelector('.sheet.open .queue-thanks');
+  if (fake) {
+    const said = await page.locator('.sheet.open .queue-say').innerText();
+    must(/mostly Long \(3 people/.test(said), 'what people say after reporting: ' + said);
+    must((await (await fetch(`${fake.url}/__state`)).json()).crowd.some((r) => r.place_id === 'tridhara' && r.level === 'long' && r.distance_m != null), 'queue report not stored');
+  }
+  must(await count('.sheet.open .btn-row .pill.quiet, .sheet.open .btn-row .pill.moderate, .sheet.open .btn-row .pill.busy, .sheet.open .btn-row .pill.packed') === 1, 'the crowd estimate pill should stay');
+  await page.locator('.sheet.open #queueBox').scrollIntoViewIfNeeded(); await shot('03c-queue-report');
+  await closeSheet();
+
   // Too far: Bagbazar from Lake Market is refused publicly, but can be kept privately
   await page.click('.tab[data-view="explore"]');
   // Explore is a list only: no in-app map
@@ -201,6 +219,10 @@ try {
   await page.click('#privBtn');
   await page.waitForTimeout(300);
   must((await statFor('bagbazar')).visits === 0, 'a too-far visit must not count publicly');
+  // Queue reports need you at the pandal too
+  await page.click('.sheet.open #queueBox:not([hidden]) [data-queue="short"]');
+  await waitToast(/queue when you're at the pandal/, 'too-far queue report');
+  if (fake) must(!(await (await fetch(`${fake.url}/__state`)).json()).crowd.some((r) => r.place_id === 'bagbazar'), 'a too-far queue report must not be stored');
   await closeSheet();
 
   // "I ate here" at a food spot, standing at it
@@ -694,6 +716,20 @@ try {
     must(st.suggestions.length === 1 && st.suggestions[0].name === 'Netaji Sangha Sarbojanin' && st.suggestions[0].status === 'pending', 'suggestion not stored as pending');
   }
   await closeSheet();
+
+  // Before the crowd_reports migration is applied (crowd_now unknown, 404): the pandal page works and the question stays hidden
+  if (fake) {
+    await fetch(`${fake.url}/__noCrowd?on=1`);
+    const pq = await ctx.newPage();
+    pq.on('pageerror', (e) => errors.push('pageerror (no crowd rpc): ' + e.message));
+    await pq.goto(base + '#p=sreebhumi');
+    await pq.waitForSelector('.sheet.open #visitBtn');
+    await pq.waitForTimeout(800);
+    must(await pq.locator('.sheet.open #queueBox:not([hidden])').count() === 0, 'the queue question should stay hidden without the RPC');
+    must(await pq.locator('.sheet.open .sheet-cta a.primary').count() === 1, 'the pandal page should still render without the RPC');
+    await pq.close();
+    await fetch(`${fake.url}/__noCrowd?on=0`);
+  }
 
   // Bengali, dark mode, offline reload
   await page.selectOption('#langSelect', 'bn');
