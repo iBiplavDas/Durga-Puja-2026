@@ -1,5 +1,5 @@
 /* Searchable "Start from" picker: my location, metro/rail stations by line, pandals by region and area, parking by region. */
-import { G, idx, t, esc, nm, zs, icon, btn } from './state.js';
+import { G, idx, t, esc, nm, zs, icon, rowBtn } from './state.js';
 import { openSheet, closeSheet, $ } from './ui.js';
 import { rname } from './filters.js';
 
@@ -45,7 +45,7 @@ export function startPickerSheet(current, onPick) {
       const items = needle ? grp.items.filter((i) => `${i.label} ${i.alt || ''} ${i.sub}`.toLowerCase().includes(needle)) : grp.items;
       if (!items.length) return '';
       return `${grp.title ? `<h3 class="sh">${esc(grp.title)}</h3>` : ''}<ul class="mini-list">${items.slice(0, needle ? 50 : 400).map((i) =>
-        `<li data-pick="${i.v}" ${btn(i.v === current ? 'aria-current="true"' : '')}><span>${icon(i.ic, 'sm')} ${i.line ? `<span class="line-${i.line}">●</span> ` : ''}${esc(i.label)}${i.sub ? ` <small>· ${esc(i.sub)}</small>` : ''}</span>${i.v === current ? icon('check', 'sm') : ''}</li>`).join('')}</ul>`;
+        `<li data-pick="${i.v}" ${i.v === current ? 'aria-current="true"' : ''}><span>${icon(i.ic, 'sm')} ${i.line ? `<span class="line-${i.line}">●</span> ` : ''}${rowBtn(esc(i.label))}${i.sub ? ` <small>· ${esc(i.sub)}</small>` : ''}</span>${i.v === current ? icon('check', 'sm') : ''}</li>`).join('')}</ul>`;
     }).join('') || `<p class="fine">${t('h.noResults')}</p>`;
   };
   openSheet(`<h2 class="title">${t('f.start')}</h2>

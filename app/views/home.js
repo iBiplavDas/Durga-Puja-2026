@@ -1,6 +1,6 @@
 /* Home: a simple start screen. "What would you like to do?" tasks, areas to pick, and ready-made routes. */
 import { hav, fmtCount, searchEntries } from '../core.js';
-import { S, G, idx, t, store, community, ll, nm, zn, zs, dn, zoneOf, esc, dist, greetDay, btn, icon, bnDigits, loc, plain, todayKey, savePrefs,
+import { S, G, idx, t, store, community, ll, nm, zn, zs, dn, zoneOf, esc, dist, greetDay, btn, rowBtn, icon, bnDigits, loc, plain, todayKey, savePrefs,
 } from '../state.js';
 import { $, go, rerender, toast, getFix, registerView } from '../ui.js';
 import { openPlace } from '../sheets.js';
@@ -257,7 +257,7 @@ function wire(el) {
       const p = r.kind === 'zone' ? idx.zone[r.id] : idx[r.kind][r.id];
       const name = r.kind === 'zone' ? zn(p) : r.kind === 'pandal' ? nm(p) : p.name;
       const meta = r.kind === 'zone' ? t('z.pandals', { n: p.pandal_ids.length }) : `${t('kindLabel.' + r.kind)} · ${esc(zs(idx.zone[p.zone]))}`;
-      return `<li data-result="${r.id}" data-kind="${r.kind}" ${btn()}><span class="kind">${icon(kindIcon[r.kind], 'sm')}</span><span><div class="nm">${esc(name)}</div><div class="meta">${meta}</div></span></li>`;
+      return `<li data-result="${r.id}" data-kind="${r.kind}"><span class="kind">${icon(kindIcon[r.kind], 'sm')}</span><span><div class="nm">${rowBtn(esc(name))}</div><div class="meta">${meta}</div></span></li>`;
     }).join('') || (input.value.trim().length >= 2 ? `<li class="muted">${t('h.noResults')} <button type="button" class="link-btn" data-suggest data-name="${esc(input.value.trim())}">${t('sg.short')}</button></li>` : '');
   };
 }

@@ -184,6 +184,17 @@ try {
   must(await page.locator('#map, #modeBtn, .leaflet-container').count() === 0, 'Explore should have no map');
   await page.selectOption('#areaSelect', 'a:north');
   must(await count('#explorePanel .item') === G.zones.find((z) => z.id === 'north').pandal_ids.length, 'area filter count');
+  // Keyboard: the place name is a real button; the page that opens is a named dialog, Tab stays inside it, and Escape
+  // closes it and puts focus back on the button.
+  await page.focus('#explorePanel .item[data-place="bagbazar"] .row-btn');
+  await page.keyboard.press('Enter');
+  await page.waitForSelector('.sheet.open');
+  must(await page.evaluate(() => !!document.querySelector('#sheet').getAttribute('aria-labelledby')), 'the page (dialog) has no name');
+  for (let i = 0; i < 6; i++) await page.keyboard.press('Tab');
+  must(await page.evaluate(() => document.querySelector('#sheet').contains(document.activeElement)), 'Tab left the open page');
+  await page.keyboard.press('Escape');
+  await page.waitForFunction(() => document.activeElement?.closest('[data-place="bagbazar"]'), null, { timeout: 3000 })
+    .catch(() => { throw new Error('focus did not return to the pandal after closing its page'); });
   await page.click('#explorePanel .item[data-place="bagbazar"]');
   // Puja-day chips on the page: footfall follows the chosen day (today's pujo day, or Saptami before the pujo)
   await page.waitForSelector('.sheet.open .day-toggle [data-sday][aria-checked="true"]');

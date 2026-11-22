@@ -26,8 +26,8 @@ function archiveHtml() {
   return `<section class="archive"><div class="section-head"><h2>${t('ar.title')}</h2><span class="fine">${t('ar.count', { n: list.length })}</span></div>
     <p class="fine pad-x">${t('ar.sub')}</p>
     <div class="chips scroll pad-x ar-years">${['all', ...years].map((y) => `<button class="chip sm" data-ary="${y}" aria-pressed="${String(ar.year) === String(y)}">${y === 'all' ? t('ar.all') : y}</button>`).join('')}</div>
-    ${show.length ? `<div class="grid-photos ar-grid">${show.map((p, i) => `<button class="thumb ar" data-ar="${i}" aria-label="${esc(p.title)}">
-        <img loading="lazy" decoding="async" referrerpolicy="no-referrer" src="${esc(p.src)}" alt="">
+    ${show.length ? `<div class="grid-photos ar-grid">${show.map((p, i) => `<button type="button" class="thumb ar" data-ar="${i}">
+        <img loading="lazy" decoding="async" referrerpolicy="no-referrer" src="${esc(p.src)}" alt="${esc(p.title)}">
         <span class="ar-year">${p.year}</span>${p.pandal && idx.pandal[p.pandal] ? `<span class="ar-name">${esc(nm(idx.pandal[p.pandal]))}</span>` : ''}</button>`).join('')}</div>`
     : `<p class="fine pad-x">${t('ar.none')}</p>`}
     ${list.length > ar.shown ? `<div class="center" style="margin:14px"><button class="btn sm" id="arMore">${t('m.more')}</button></div>` : ''}

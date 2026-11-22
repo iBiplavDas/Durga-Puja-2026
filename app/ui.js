@@ -47,24 +47,34 @@ export function setupSheet() {
   sh.addEventListener('touchstart', (e) => { if (sh.scrollTop <= 0) y0 = e.touches[0].clientY; }, { passive: true });
   sh.addEventListener('touchend', (e) => { if (y0 != null && e.changedTouches[0].clientY - y0 > 90) closeSheet(); y0 = null; });
 }
+/* While a page (sheet) is open, everything behind it is inert: Tab and screen readers stay inside the page. These all sit
+ * under the backdrop anyway, so nothing a finger could reach is lost. */
+const BEHIND = '.topbar, #main, .tabbar, #fabAdd, .radio-fab-wrap';
 export function openSheet(html, onMount, onClose) {
   const s = $('#sheet');
   if (!sheetIsOpen()) opener = document.activeElement;
   onCloseCb?.(); onCloseCb = onClose || null;
   $('#sheetBody').innerHTML = html; $('#sheetBackdrop').hidden = false;
+  s.inert = false; $$(BEHIND).forEach((el) => (el.inert = true));
   s.scrollTop = 0; s.setAttribute('aria-hidden', 'false');
   const tok = ++openTok; requestAnimationFrame(() => { if (tok === openTok) s.classList.add('open'); }); s.focus({ preventScroll: true });
   if (!sheetEntry && booted) { history.pushState({ view: S.view, sheet: true }, '', location.hash); sheetEntry = true; }
   onMount?.($('#sheetBody'));
+  // Screen readers announce the page by its heading.
+  const h = $('#sheetBody h1, #sheetBody h2, #sheetBody h3');
+  if (h) { h.id ||= 'sheetTitle'; s.setAttribute('aria-labelledby', h.id); s.removeAttribute('aria-label'); }
+  else { s.removeAttribute('aria-labelledby'); s.setAttribute('aria-label', t('sheet.label')); }
 }
 export function closeSheet(fromBack = false) {
   const s = $('#sheet');
   if (!sheetIsOpen()) return;
   if (sheetEntry) { sheetEntry = false; if (fromBack !== true) { skipPop++; history.back(); } } // drop the page's history entry
   openTok++; s.classList.remove('open'); s.setAttribute('aria-hidden', 'true'); $('#sheetBackdrop').hidden = true;
+  s.inert = true; $$(BEHIND).forEach((el) => (el.inert = false));
   onCloseCb?.(); onCloseCb = null;
   $$('video', s).forEach((v) => v.pause());
-  opener?.focus?.({ preventScroll: true }); opener = null;
+  // Back to whatever opened the page (if it is still on screen after a re-render).
+  if (opener?.isConnected) opener.focus({ preventScroll: true }); opener = null;
 }
 export const sheetIsOpen = () => $('#sheet').getAttribute('aria-hidden') === 'false';
 

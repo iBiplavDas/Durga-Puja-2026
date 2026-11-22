@@ -1,7 +1,7 @@
 /* Explore: Pandals / Food / Parking, one row of filters, and the list. */
 import { hav, isOpen, pandalFilter, stationOptions } from '../core.js';
 import {
-  S, G, idx, t, store, community, ll, nm, zn, zs, zoneOf, esc, dist, ampm, dn, crowdNow, btn, icon, loc,
+  S, G, idx, t, store, community, ll, nm, zn, zs, zoneOf, esc, dist, ampm, dn, crowdNow, rowBtn, icon, loc,
 } from '../state.js';
 import { $, registerView, getFix, toast } from '../ui.js';
 import { offerChip, featuredFirst } from '../offers.js';
@@ -19,8 +19,8 @@ export function setExplore(patch) { Object.assign(S.explore, patch); }
 
 function pandalItem(p) {
   const z = zoneOf(p.zone), c = crowdNow(p);
-  return `<li class="item ${visitedToday(p.id) ? 'visited' : ''}" data-place="${p.id}" ${btn(`aria-label="${esc(nm(p))}"`)}>
-    <h3 class="nm">${esc(nm(p))}</h3>
+  return `<li class="item ${visitedToday(p.id) ? 'visited' : ''}" data-place="${p.id}">
+    <h3 class="nm">${rowBtn(esc(nm(p)))}</h3>
     <div class="side"><span class="score">${icon('star', 'sm fill')}${p.popularity}</span>${statsHtml(p.id, { compact: true })}</div>
     <div class="meta">${esc(zs(z))}${S.me ? ` · ${dist(hav(S.me, ll(p)))}` : ''} · ${icon('metro', 'sm')} ${esc(p.nearest_metro.name)}</div>
     ${p.theme_2026 ? `<div class="theme-line"><b>${t('p.theme2026')}</b>${esc(themeTitle(p.theme_2026))}</div>` : ''}
@@ -31,10 +31,10 @@ function foodItem(f) {
   const near = f.near_pandals.slice(0, 2).map((id) => nm(idx.pandal[id]));
   const marks = dietMarks(f);
   const ph = foodPhoto(f);
-  return `<li class="item food-item ${ph ? 'has-thumb' : ''} ${visitedToday(f.id) ? 'visited' : ''}" data-place="${f.id}" ${btn(`aria-label="${esc(f.name)}"`)}>
+  return `<li class="item food-item ${ph ? 'has-thumb' : ''} ${visitedToday(f.id) ? 'visited' : ''}" data-place="${f.id}">
     ${ph ? `<div class="fi-thumb">${photoBg(ph, 'fi-img')}</div>` : ''}
     <div class="main">
-      <h3 class="nm">${esc(f.name)}</h3>
+      <h3 class="nm">${rowBtn(esc(f.name))}</h3>
       <div class="meta">${esc(f.dishes.slice(0, 3).join(' · '))}</div>
       ${offerChip(f.id)}
       ${openHtml(f)}
@@ -123,9 +123,9 @@ function listHtml(e, list) {
   return `${carCardHtml()}
     ${e.region === 'all' ? '' : zl.map((z) => `<div class="notice ${z.car_advisory}"><b>${esc(zs(z))}: ${t('adv.' + z.car_advisory)}</b><span>${esc(z.walk_tip)}</span></div>`).join('')}
     <div class="section-head" style="margin-top:16px"><h2>${t('h.parking')}</h2></div>
-    <ul class="list">${list.map((p) => `<li class="item park-item" data-place="${p.id}" ${btn(`aria-label="${esc(p.name)}"`)}>
+    <ul class="list">${list.map((p) => `<li class="item park-item" data-place="${p.id}">
       <div class="pk-ic" aria-hidden="true">P</div>
-      <div class="main"><h3 class="nm">${esc(p.name)}</h3>
+      <div class="main"><h3 class="nm">${rowBtn(esc(p.name))}</h3>
         <div class="meta">${t('kind.' + p.kind)} · ${t('cap.' + p.capacity)}</div>
         <div class="fine">${esc(p.note)}</div></div>
       <div class="side"><span class="park-cost"><b>${esc(p.rate_hint)}</b><small>${t('park.costLbl')}</small></span></div></li>`).join('') || `<li class="empty">${e.q.trim() ? t('exs.none', { q: esc(e.q.trim()) }) : t('park.none')}</li>`}</ul>

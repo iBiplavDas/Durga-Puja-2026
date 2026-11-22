@@ -87,6 +87,10 @@ export const greetDay = (days = G.data.meta.days) => {
   return days.find((d) => d.tithi_from && d.tithi_from <= k && k <= d.date) || days.find((d) => d.date === k) || null;
 };
 export const btn = (attrs = '') => `role="button" tabindex="0" ${attrs}`;
+/** For a row in a list (a pandal card, a nearby eatery): the row stays a list item and its name is a real button, so
+ * screen readers get the list, the heading and a button named after the place. A tap anywhere on the row still works
+ * (the click bubbles to the row's data-* attribute). */
+export const rowBtn = (label, attrs = '') => `<button type="button" class="row-btn" ${attrs}>${label}</button>`;
 // Headings are set in type, not emoji: strip any emoji a translation carries.
 export const plain = (s) => String(s).replace(/[\p{Extended_Pictographic}\u{1F1E6}-\u{1F1FF}]\uFE0F?/gu, '').replace(/\s{2,}/g, ' ').trim();
 export const icon = (name, cls = '') => `<svg class="ic ${cls}" aria-hidden="true"><use href="#i-${name}"/></svg>`;

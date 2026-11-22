@@ -127,6 +127,8 @@ function applyStatic(full = true) {
   $('#langSelect').setAttribute('aria-label', t('lang.aria'));
   $('#sheetClose').setAttribute('aria-label', t('sheet.close'));
   $('#fabAdd').setAttribute('aria-label', t('m.add'));
+  $('#sosBtn').setAttribute('aria-label', t('sos.open'));
+  $('.tabbar').setAttribute('aria-label', t('tab.aria'));
   const now = new Date(); now.setHours(0, 0, 0, 0);
   const shashthi = new Date(idx.day.shashthi.date + 'T00:00:00'), dashami = new Date(idx.day.dashami.date + 'T00:00:00');
   const todayDay = greetDay(), diff = Math.round((shashthi - now) / 864e5);
