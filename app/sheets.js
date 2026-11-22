@@ -1,11 +1,11 @@
 /* Detail sheets: pandal, eatery, parking, moment viewer, and the upload flow. */
-import { hav, fmtCount, isOpen, hoursOf, nearest, timeAgo, vibeOf } from './core.js';
+import { hav, fmtCount, isOpen, hoursOf, nearest, timeAgo, vibeOf, crowdSummary, QUEUE_LEVELS } from './core.js';
 import {
   S, G, idx, t, store, community, ll, M, nm, zn, dn, zoneOf, placeOf, placeKind, esc, km, dist, ampm,
   crowdIndex, crowdWord, crowdColor, crowdLevel, dayFactor, btn, icon, savePrefs,
 } from './state.js';
 import { openSheet, closeSheet, toast, go, getFix, rerender, $ } from './ui.js';
-import { visit, visitPrivately, visitMessage, visitedToday, celebrateVisit } from './actions.js';
+import { visit, visitPrivately, visitMessage, visitedToday, celebrateVisit, allowedDistance } from './actions.js';
 import { prepareMedia } from './media.js';
 import { CONFIG } from './config.js';
 import { shareCtaHtml, wireShareCta } from './growth.js';
@@ -160,6 +160,59 @@ function wireVisit(el, id, reopen) {
       return;
     }
     reopen(); rerender();
+  };
+}
+
+/* ---------------- "How's the queue here?": people at a pandal say Short / Medium / Long ----------------
+ * Beside the crowd model (the pill above it), never instead of it. "People here say…" shows only from 3 people in the
+ * last 45 minutes (core.js crowdSummary): no signal beats a misleading one. The box stays hidden until the server
+ * answers, so before the crowd_reports migration is applied (community.crowdMissing) the page simply hasn't got it.
+ * Reporting needs a fresh GPS fix at the pandal, like a check-in; the server checks the distance again. */
+const queueWord = (k) => t('qr.lv.' + k);
+function queueSayHtml(agg) {
+  const s = crowdSummary(agg);
+  if (!s) return '';
+  const line = s.level ? t('qr.peopleSay', { level: queueWord(s.level), n: fmtCount(s.n) })
+    : t('qr.mixed', { counts: QUEUE_LEVELS.filter((k) => s.counts[k]).map((k) => `${queueWord(k)} ${fmtCount(s.counts[k])}`).join(', ') });
+  return `<p class="queue-say">${s.level ? `<span class="dot q-${s.level}"></span>` : ''}<b>${line}</b></p><p class="fine">${t('qr.note')}</p>`;
+}
+const queueThanksHtml = (text) => `<p class="queue-thanks">${icon('check', 'sm')} ${text}</p>`;
+function queueAskHtml(id) {
+  const mine = community.myCrowdReport(id);
+  if (mine) return queueThanksHtml(t('qr.thanks', { level: queueWord(mine.level) }));
+  return `<p class="queue-q">${t('qr.q')}</p>
+    <div class="queue-btns" role="group" aria-label="${t('qr.q')}">${QUEUE_LEVELS.map((k) => `<button type="button" class="btn queue-btn" data-queue="${k}"><span class="dot q-${k}"></span>${queueWord(k)}</button>`).join('')}</div>
+    <p class="fine">${t('qr.sub')}</p>`;
+}
+function queueBoxHtml(id) {
+  if (!community.enabled || community.crowdMissing) return '';
+  return `<section class="queue-box" id="queueBox" hidden><div id="queueAsk">${queueAskHtml(id)}</div><div id="queueSay"></div></section>`;
+}
+function wireQueue(el, id) {
+  const box = $('#queueBox', el); if (!box) return;
+  const say = $('#queueSay', el), ask = $('#queueAsk', el);
+  community.crowdNow(id).then((agg) => { if (agg) { box.hidden = false; say.innerHTML = queueSayHtml(agg); } }).catch(() => { /* offline: leave it out */ });
+  box.onclick = async (e) => {
+    const b = e.target.closest('[data-queue]'); if (!b) return;
+    const level = b.dataset.queue, btns = [...box.querySelectorAll('[data-queue]')], label = b.innerHTML;
+    const reset = () => { btns.forEach((x) => (x.disabled = false)); b.innerHTML = label; };
+    btns.forEach((x) => (x.disabled = true)); b.innerHTML = `${icon('locate', 'sm')} ${t('v.locatingShort')}`;
+    let f;
+    // Always a fresh fix, as for check-ins: a cached one could be from before you walked up to the pandal.
+    try { f = await getFix({ maximumAge: 0 }); } catch (err) { reset(); return toast(err?.code === 'denied' ? t('fit.denied') : t('v.noFix'), 4000); }
+    const p = placeOf(id), d = hav([f.lat, f.lng], ll(p));
+    if (d > allowedDistance(p, f.accuracy)) { reset(); track('crowd_report', { place: id, kind: 'pandal', d: 'too_far' }); return toast(t('qr.tooFar', { d: dist(d) }), 4000); }
+    let r;
+    try { r = await community.reportCrowd(id, level, f); } catch { reset(); return toast(t('qr.failed')); }
+    track('crowd_report', { place: id, kind: 'pandal', d: r.status === 'ok' ? level : r.status });
+    if (r.status === 'unavailable') { box.hidden = true; return toast(t('qr.notYet')); }
+    if (r.status === 'ok' || r.status === 'too_soon') {
+      ask.innerHTML = queueThanksHtml(r.status === 'ok' ? t('qr.thanks', { level: queueWord(level) }) : t('qr.tooSoon'));
+      say.innerHTML = queueSayHtml(r) || `<p class="fine">${t('qr.few')}</p>`;
+      return;
+    }
+    reset();
+    toast(r.status === 'too_far' ? t('qr.tooFar', { d: dist(r.distance_m || d) }) : r.status === 'rate_limited' ? t('qr.rate') : t('qr.failed'), 4000);
   };
 }
 
@@ -335,6 +388,7 @@ export function pandalSheet(id) {
     ${titleRow(id, nm(p), `<div class="fine">${S.prefs.lang === 'bn' ? esc(p.name) : esc(p.name_bn || '')}</div>`)}
     ${addrHtml(p)}
     <div class="btn-row" style="margin-top:8px">${crowdPill(now)}<span class="pill">${icon('star', 'sm fill')} ${p.popularity}/5</span>${vibePill(p)}${awardPill(p)}${p.geo_source === 'osm-approx' ? `<span class="pill">${icon('pin', 'sm')} ${t('p.approx')}</span>` : ''}</div>
+    ${queueBoxHtml(id)}
     ${themeHtml(p.theme_2026)}
     ${galleryHtml(p.photos)}
     ${dayToggleHtml()}
@@ -360,7 +414,7 @@ export function pandalSheet(id) {
     <p class="fine" style="margin-top:16px">${t('p.disclaimer')}</p>
     ${ctaBar(id, p)}`,
   (el) => {
-    wireVisit(el, id, () => pandalSheet(id)); wireDayToggle(el, () => pandalSheet(id));
+    wireVisit(el, id, () => pandalSheet(id)); wireDayToggle(el, () => pandalSheet(id)); wireQueue(el, id);
     wireGallery(el, p.photos || [], () => pandalSheet(id)); wireShareCta(el, id);
     el.querySelectorAll('[data-food]').forEach((li) => (li.onclick = () => foodSheet(li.dataset.food)));
     el.querySelectorAll('[data-park]').forEach((li) => (li.onclick = () => parkSheet(li.dataset.park)));

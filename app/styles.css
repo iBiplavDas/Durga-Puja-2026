@@ -899,6 +899,21 @@ button.badge-tile.got small { color: var(--gold); font-weight: 600; }
 .hours i.now { opacity: 1; outline: 1.5px solid var(--ink); outline-offset: 1px; }
 .hours-axis { display: flex; justify-content: space-between; font-size: 10.5px; color: var(--ink-3); }
 .verify { margin-top: 10px; }
+/* "How's the queue here?": three big plain buttons; what people say sits under them, apart from the crowd estimate */
+.queue-box { margin: 14px 0 0; padding: 12px 14px; border-radius: 14px; background: var(--surface); border: 1px solid var(--line); display: grid; gap: 8px; }
+.queue-box[hidden] { display: none; }
+.queue-box .fine { margin: 0; }
+.queue-q { margin: 0; font-weight: 650; font-size: 15px; color: var(--ink); }
+.queue-btns { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.btn.queue-btn { min-height: 52px; padding: 8px 6px; font-size: 15.5px; display: inline-flex; align-items: center; justify-content: center; gap: 7px; }
+.queue-box .dot { flex: none; width: 10px; height: 10px; border-radius: 50%; }
+.dot.q-short { background: var(--c-quiet); }
+.dot.q-medium { background: var(--c-moderate); }
+.dot.q-long { background: var(--c-packed); }
+.queue-thanks { margin: 0; display: flex; align-items: center; gap: 6px; font-weight: 600; color: var(--ok); }
+.queue-say { margin: 0; display: flex; align-items: flex-start; gap: 7px; font-size: 14px; color: var(--ink-2); }
+.queue-say b { font-weight: 600; color: var(--ink); }
+.queue-say .dot { margin-top: 5px; }
 .day-toggle { display: flex; gap: 6px; overflow-x: auto; margin: 16px -18px 0; padding: 2px 18px; scrollbar-width: none; }
 .day-toggle::-webkit-scrollbar { display: none; }
 .day-toggle button { flex: none; border: 1px solid var(--line); background: var(--surface); color: var(--ink-2); border-radius: 999px; padding: 6px 13px; font-size: 13px; font-weight: 600; cursor: pointer; }
