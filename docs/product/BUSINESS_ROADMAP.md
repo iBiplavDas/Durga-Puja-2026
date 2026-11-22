@@ -2,6 +2,7 @@
 
 > Companion to [../marketing/STRATEGY.md](../marketing/STRATEGY.md), which covers the 1-lakh push up to Bijoya.
 > This file covers what comes after: how the audience grows past one festival, and how it pays for itself.
+> The longer plan, to a ₹100 crore business by March 2029 with gates, is in [PLAN_100CR.md](PLAN_100CR.md) (22 Nov 2026).
 
 ## The honest starting point
 
