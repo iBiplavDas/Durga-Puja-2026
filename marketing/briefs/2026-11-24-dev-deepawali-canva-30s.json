@@ -1,0 +1,182 @@
+{
+ "video_title": "Dev Deepawali 30s, v2 story",
+ "production_spec": {
+  "schema_version": 1,
+  "blueprint": {
+   "id": "generic",
+   "selection_reason": "A narrated mythology and festival film is not a product, try-on or unboxing film, so the free film is the only fit. Closest template is the faceless unboxing; not used because there is no product, but its voice-over-only approach is borrowed."
+  },
+  "brief": {
+   "objective": "A 30-second cinematic Hindi reel for Dev Deepawali: to destroy three asuras whose flying cities could fall only to one arrow when all three lined up once in a thousand years, the whole universe became Shiva's weapon; one arrow ended a thousand years of darkness, and the gods lit lamps in Kashi. Key message: the night the gods' own Diwali began. It ends on an open question that sets up Part 2.",
+   "audience": "Hindi-speaking teens and adults (16 to 40) across India, scrolling Instagram Reels in the evening, who love epic, spiritual, visually stunning stories. Not children.",
+   "placement": "Instagram Reels, 9:16, mostly watched with sound on; Hindi captions are added in editing. The first frame must stop the scroll.",
+   "subject": "A respectful cinematic telling of the Tripurari legend: Shiva only as a vast backlit silhouette drawing a bow, a cosmic chariot made of the earth with the sun and moon as wheels, three flying fortress-cities, then the ghats of Varanasi lit with diyas on Kartik Purnima. Crowds and priests are generated; no real identifiable person.",
+   "verified_claims": [
+    "Dev Deepawali is celebrated in Varanasi on Kartik Purnima, Tuesday 24 November 2026.",
+    "In the Shiva Purana (Rudra Samhita, Yuddha Khanda), Tripura's three cities could be destroyed only by a single arrow when they aligned, once in a thousand years.",
+    "In the Shiva Purana the earth became Shiva's chariot with the sun and moon as wheels, Brahma as charioteer, Mount Meru as the bow, Vasuki as the string and Vishnu as the arrow.",
+    "Tradition holds that the gods celebrated Shiva's victory by lighting lamps in Kashi on Kartik Purnima."
+   ],
+   "call_to_action": "None inside the film. The caption asks viewers to send it to a friend in Kashi and to follow for Part 2."
+  },
+  "output": {
+   "engine": "seedance",
+   "aspect_ratio": "9:16",
+   "duration_seconds": 30,
+   "resolution": "720p"
+  },
+  "visual_direction": {
+   "concept": "From a weapon made of the cosmos to a river of light. The film opens on the climax already in motion (a colossal silhouette drawing a bow at three burning cities), steps back to the boon and the cosmic chariot, releases the single arrow, shatters the cities into a slow rain of golden sparks, and lets those sparks land as the diyas of Varanasi. It ends on golden figures of light descending to the Ganga: an unanswered question. Emotional arc: dread turning to awe, then wonder.",
+   "setting": "The legend beats happen in a vast stormy night sky above dark snow-capped Himalayan peaks and in deep space above the curve of a glowing Earth. The last beats are the ghats of Varanasi on the Ganga under a full moon: worn stone steps rising from dark water, old temples and palaces above, wooden boats, countless small clay diyas, marigolds, incense smoke.",
+   "look": "Photorealistic live-action epic film: anamorphic lens character, shallow depth of field, fine film grain, deep indigo-teal night against molten gold firelight, volumetric haze, real flickering flame light on wet stone and water, long mirror reflections on the river. Grounded and majestic, never cartoonish or glossy.",
+   "continuity": "The three cities are always one of gold, one of silver and one of dark iron, glowing red at the core. Shiva is always the same backlit silhouette with two arms, long matted hair and a small crescent moon, never a face. The arrow is golden fire, and the same gold carries into the falling sparks and the diya light. In Varanasi the river flows across the frame, the ghats rise on screen left and the full moon is high on screen right."
+  },
+  "storyboard": [
+   {
+    "id": "hook",
+    "start_ms": 0,
+    "end_ms": 3500,
+    "intention": "Hook: the universe itself becoming a weapon, shown before it is explained.",
+    "framing": "Wide low-angle shot from behind and below a colossal dark silhouette of Shiva on a Himalayan summit, the bow filling the upper frame, three glowing fortress-cities in the stormy sky beyond.",
+    "action": "The silhouette draws the gigantic bow to full stretch and the arrowhead ignites with blinding golden fire; the shot ends just before release.",
+    "camera_movement": "Slow push in behind the silhouette.",
+    "lighting": "Pure backlight from pale storm clouds and the golden arrowhead; the figure stays a black silhouette.",
+    "reference_ids": [
+     "style"
+    ],
+    "dialogue": "तीन असुरों को मारने के लिए… पूरा ब्रह्मांड हथियार बना।",
+    "transition": "cut"
+   },
+   {
+    "id": "tripura",
+    "start_ms": 3500,
+    "end_ms": 8500,
+    "intention": "The stakes: three flying cities that only one impossible moment can destroy.",
+    "framing": "Wide low-angle shot of a stormy night sky above dark peaks: three colossal fortress-cities of gold, silver and iron float apart from each other.",
+    "action": "The three cities drift slowly across the sky in different directions, lightning flickering around them and embers falling onto the peaks.",
+    "camera_movement": "Slow tilt up from the peaks to the cities.",
+    "lighting": "Storm-blue night lit by the red glow of the cities and white lightning.",
+    "reference_ids": [
+     "style"
+    ],
+    "dialogue": "उनके तीन उड़ते नगर… एक ही बाण से टूटते, जब तीनों एक सीध में हों।",
+    "transition": "cut"
+   },
+   {
+    "id": "chariot",
+    "start_ms": 8500,
+    "end_ms": 13000,
+    "intention": "The turn: creation itself builds the weapon.",
+    "framing": "Epic wide shot in deep space above the curve of a glowing Earth: a colossal golden chariot forming out of light, its body made of land and ocean, one wheel a blazing sun and the other a silver full moon.",
+    "action": "The chariot completes itself as both wheels begin to turn, and a single arrow of brilliant blue-white light takes shape beside it.",
+    "camera_movement": "Slow orbit around the chariot.",
+    "lighting": "Golden sunlight and cool moonlight on either side, star field and nebula haze behind.",
+    "reference_ids": [
+     "style"
+    ],
+    "dialogue": "धरती रथ बनी, सूरज-चाँद पहिये… और स्वयं विष्णु, बाण बन गए।",
+    "transition": "cut"
+   },
+   {
+    "id": "release",
+    "start_ms": 13000,
+    "end_ms": 17000,
+    "intention": "The moment after a thousand years: alignment and release.",
+    "framing": "Wide shot from behind the same silhouette on the summit; in the sky the three cities now hang in one straight line.",
+    "action": "The silhouette releases the arrow and it streaks upward as a blazing golden line towards the aligned cities.",
+    "camera_movement": "Fast tilt up following the arrow.",
+    "lighting": "Backlit silhouette; the arrow lights the clouds gold as it flies.",
+    "reference_ids": [
+     "style"
+    ],
+    "dialogue": "हज़ार साल बाद वो पल आया। शिव ने एक ही बाण चलाया।",
+    "transition": "cut"
+   },
+   {
+    "id": "sparks",
+    "start_ms": 17000,
+    "end_ms": 20500,
+    "intention": "Release: a thousand years of darkness breaks.",
+    "framing": "Wide shot of the sky as the arrow pierces all three aligned cities.",
+    "action": "The cities burst silently into a vast slow shower of golden sparks drifting down like falling lamps, and the storm clouds part to reveal a full moon.",
+    "camera_movement": "Slow tilt down with the falling sparks.",
+    "lighting": "Golden spark light filling the frame, the storm turning to calm moonlit indigo.",
+    "reference_ids": [
+     "style"
+    ],
+    "dialogue": "और हज़ार साल का अंधेरा, एक पल में टूट गया।",
+    "transition": "match-cut"
+   },
+   {
+    "id": "ghats",
+    "start_ms": 20500,
+    "end_ms": 25500,
+    "intention": "Match: the falling sparks become the diyas of Kashi, still lit today.",
+    "framing": "Wide shot from a wooden boat on the Ganga towards the ghats of Varanasi: endless stone steps, temples above, the full moon high on the right.",
+    "action": "Golden sparks settle onto the steps and rows of small clay diyas flicker to life one after another, their long reflections shimmering on the river.",
+    "camera_movement": "Slow lateral glide along the ghats.",
+    "lighting": "Warm flickering diya light on stone and water against deep indigo night, soft incense haze.",
+    "reference_ids": [
+     "style"
+    ],
+    "dialogue": "उस रात देवताओं ने काशी में दीप जलाए… आज भी, देव दीपावली।",
+    "transition": "cut"
+   },
+   {
+    "id": "question",
+    "start_ms": 25500,
+    "end_ms": 30000,
+    "intention": "Cliffhanger: an image that raises the next story's question.",
+    "framing": "Wide shot from the top of the ghat steps looking down at the Ganga full of floating diyas under the full moon.",
+    "action": "Several tall translucent figures of soft golden light descend slowly from the moonlit sky and touch the river, sending gentle golden ripples among the lamps; the frame then holds.",
+    "camera_movement": "Slow push out down the steps.",
+    "lighting": "Gold lamp light and the figures' soft glow against deep indigo sky and mist on the water.",
+    "reference_ids": [
+     "style"
+    ],
+    "dialogue": "पर उसी रात, देवता गंगा में क्यों उतरते हैं?",
+    "transition": "fade"
+   }
+  ],
+  "reference_images": [
+   {
+    "id": "style",
+    "role": "brand_style",
+    "subject_kind": "fictional",
+    "description": "A generated style frame used only for palette and lighting: deep indigo-teal night, molten gold firelight, volumetric haze. It sets the look, not a set.",
+    "preserve_details": [
+     "deep indigo-teal night sky",
+     "molten gold firelight",
+     "volumetric haze",
+     "photorealistic film grain"
+    ],
+    "source": {
+     "kind": "generate",
+     "image_prompt": "Photorealistic film still, 9:16: a vast stormy indigo-teal night sky over dark snow-capped mountain peaks, a single blazing golden streak of light crossing the clouds, thin volumetric haze, fine film grain, anamorphic lens character, no people, no text, no lettering, no logo."
+    }
+   }
+  ],
+  "audio": {
+   "mode": "voice-over",
+   "language": "Hindi",
+   "accent": "Neutral North Indian Hindi",
+   "voice_direction": "Adult male storyteller, 35 to 45, deep warm baritone; slow and gripping as if sharing a secret, natural pauses at the ellipses and commas, a held breath before the arrow line, quiet awe on the darkness breaking, a curious inviting tone on the final question. Never theatrical.",
+   "music": "Original instrumental score, about 70 BPM: low drone and a soft temple bell under the hook, dark strings and deep drums under the cities and chariot, a breath of silence before the release then a big swell, warm strings blooming over the ghats, resolving softly under the question. Always under the voice.",
+   "ambience": "Wind and distant thunder in the sky beats; a deep cosmic hum around the chariot; the creak of the bow and a roaring whoosh as the arrow flies; a soft shimmering hush as the sparks fall; river water, oars and distant temple bells at the ghats."
+  },
+  "constraints": [
+   "Respectful devotional portrayal: Shiva appears only as a dignified backlit silhouette with two arms, never a visible face; no gore, no horror.",
+   "No captions, subtitles, titles, watermarks, lettering, signboards or logos anywhere in the frame.",
+   "No modern objects in the legend beats; at the ghats no phones, cars, plastic, electric signboards or screens.",
+   "Every person has exactly two arms, two hands and one face.",
+   "Photorealistic live-action look throughout; never cartoon, anime or 3D-animated style.",
+   "Every narration line is spoken once, in Hindi, exactly as written, by the same narrator; nothing else is spoken."
+  ],
+  "assumptions": [
+   "The owner approved the v2 Dev Deepawali script on 15 Nov and asked for this 30-second cut on 22 Nov because the 12 longer Flow clips are not available.",
+   "The story moves from sky and space to the ghats, unlike a one-place film, because the legend and the festival it explains happen in those places.",
+   "Word-by-word Hindi captions, the date line and the handle end card are added later in editing, not generated in the film.",
+   "The style reference sets palette and light only; every scene is described in words."
+  ]
+ }
+}
